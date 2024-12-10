@@ -25,16 +25,20 @@ class PythonSyntaxHighlighter(QSyntaxHighlighter):
     def highlightBlock(self, text):
         lexer = PythonLexer(InputStream(text))
         token = lexer.nextToken()
+        keywords = {"def", "class", "if", "else", "elif", "for", "while", "import", "from", "return", "print"}  # Ключевые слова Python
+
         while token.type != Token.EOF:
-            token_type = lexer.symbolicNames[token.type]
+            token_text = token.text
             start_index = token.start
-            length = len(token.text)
-            if token_type == 'KEYWORD':
+            length = len(token_text)
+
+            if token_text in keywords:  # Проверяем, является ли токен ключевым словом
                 self.setFormat(start_index, length, self.styles['keyword'])
-            elif token_type == 'STRING':
+            elif token.type == PythonLexer.STRING:
                 self.setFormat(start_index, length, self.styles['string'])
-            elif token_type == 'COMMENT':
+            elif token.type == PythonLexer.COMMENT:
                 self.setFormat(start_index, length, self.styles['comment'])
             else:
                 self.setFormat(start_index, length, self.styles['default'])
+
             token = lexer.nextToken()

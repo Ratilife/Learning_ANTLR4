@@ -1,7 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QTextEdit
 from PyQt5.QtGui import QTextDocument
-from ex4 import PythonSyntaxHighlighter
+from ex6 import PythonSyntaxHighlighter
 
 app = QApplication(sys.argv)
 
