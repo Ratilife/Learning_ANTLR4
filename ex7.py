@@ -16,6 +16,7 @@ def apply_syntax_highlighting(text_widget, text):
     colors = {
         'KEYWORD': 'blue',
         'STRING': 'green',
+        'NUMBER': 'purple',
         'COMMENT': 'gray',
         'DEFAULT': 'black',
     }
