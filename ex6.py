@@ -52,7 +52,10 @@ class PythonSyntaxHighlighter(QSyntaxHighlighter):
         token = lexer.nextToken()                       # Получаем первый токен
 
         # Ключевые слова Python
-        keywords = {"def", "class", "if", "else", "elif", "for", "while", "import", "from", "return", "print"}
+        keywords = {'False', 'None', 'True', 'and', 'as', 'assert', 'async', "await", 
+                    'break', 'class', 'continue', 'def', 'del', 'elif', 'else', 'except', 
+                    'finally', 'for', 'from', 'global', 'if', 'import', 'in', 'is', 'lambda', 
+                    'nonlocal', 'not', 'or', 'pass', 'raise', 'return', 'try', 'while', 'with', 'yield'}
 
         while token.type != Token.EOF:                  # Пока не достигнут конец текста
             token_text = token.text                     # Текст текущего токена
