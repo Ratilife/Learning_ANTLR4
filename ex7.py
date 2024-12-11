@@ -12,13 +12,69 @@ def apply_syntax_highlighting(text_widget, text):
     lexer = PythonLexer(InputStream(text))
     token = lexer.nextToken()
 
+    '''
+        Красный: 'red'
+        Зеленый: 'green'
+        Синий: 'blue'
+        Желтый: 'yellow'
+        Оранжевый: 'orange'
+        Фиолетовый: 'purple'
+        Коричневый: 'brown'
+        Серый: 'gray'
+        Черный: 'black'
+        Белый: 'white'
+
+        Светло-синий:   '#ADD8E6'
+        Светло-зеленый: '#90EE90'
+        Светло-желтый:  '#FFFFE0'
+        Коралловый:     '#FF7F50'
+        Лавандовый:     '#E6E6FA'
+        Бирюзовый:      '#40E0D0'
+        СэддлБраун:	    '#8B4513'
+        Чирок:	        '#008080'
+        Темно-оранжевый:'#FF8C00'
+        Светло-Морской Зеленый:	'#20B2AA'
+    '''
     # Цвета для подсветки
     colors = {
-        'KEYWORD': 'blue',
-        'STRING': 'green',
-        'NUMBER': 'purple',
-        'COMMENT': 'gray',
-        'DEFAULT': 'black',
+        'NAME'     : '#FF7F50',
+        'KEYWORD'  : 'blue',
+        'STRING'   : 'brown',
+        'NUMBER'   : 'purple',
+        'COMMENT'  : 'green',
+        'DEFAULT'  : 'black',
+        'AWAIT'    :  'blue',
+        'ELSE'     : 'blue',
+        'IMPORT'   : 'blue',
+        'PASS'     : 'blue',
+        'BREAK'    : 'blue',
+        'EXCEPT'   : 'blue',
+        'IN'       : 'blue',
+        'RAISE'    : 'blue',
+        'CLASS'    : 'blue',
+        'FINALLY'  : 'blue',
+        'IS'       : 'blue',
+        'RETURN'   : 'blue',
+        'AND'      : 'blue',
+        'CONTINUE' : 'blue',
+        'FOR'      : 'blue',
+        'LAMBDA'   : 'blue',
+        'TRY'      : 'blue',
+        'AS'       : 'blue',
+        'DEF'      : 'blue',
+        'FROM'     : 'blue',
+        'NONLOCAL' : 'blue',
+        'WHILE'    : 'blue',
+        'ASSERT'   : 'blue',
+        'DEL'      : 'blue',
+        'GLOBAL'   : 'blue',
+        'NOT'      : 'blue',
+        'WITH'     : 'blue',
+        'ASYNC'    : 'blue',
+        'ELIF'     : 'blue',
+        'IF'       : 'blue',
+        'OR'       : 'blue',
+        'YIELD'    : 'blue',
     }
 
     # Проходим по токенам
