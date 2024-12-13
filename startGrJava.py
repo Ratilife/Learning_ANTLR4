@@ -1,7 +1,7 @@
 from graphviz import Digraph
 from antlr4 import *
-from Java.JavaLexer import JavaLexer
-from Java.JavaParser import JavaParser
+from Java.Java20Lexer import JavaLexer
+from Java.Java20Parser import JavaParser
 
 # Функция для безопасного создания имени узла
 def sanitize_text(text):

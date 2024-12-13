@@ -1,0 +1,8 @@
+antlr4 -Dlanguage=Python3 CSharpLexer.g4 CSharpParser.g4
+ИЛИ упоковать в папку
+antlr4 -Dlanguage=Python3 CSharpLexer.g4 -o CShar
+antlr4 -Dlanguage=Python3 CSharpParser.g4 -o CShar
+
+
+antlr4 -Dlanguage=Python3 CSharpLexer.g4 CSharpParser.g4 CSharpPreprocessorParser.g4
+

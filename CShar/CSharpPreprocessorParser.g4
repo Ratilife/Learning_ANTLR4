@@ -13,7 +13,7 @@ options {
 }
 
 preprocessor_directive
-    returns[Boolean value]
+    returns[bool value]
     : DEFINE CONDITIONAL_SYMBOL directive_new_line_or_sharp { this.OnPreprocessorDirectiveDefine(); }                        # preprocessorDeclaration
     | UNDEF CONDITIONAL_SYMBOL directive_new_line_or_sharp { this.OnPreprocessorDirectiveUndef(); }                          # preprocessorDeclaration
     | IF expr = preprocessor_expression directive_new_line_or_sharp { this.OnPreprocessorDirectiveIf(); }                    # preprocessorConditional
@@ -35,7 +35,7 @@ directive_new_line_or_sharp
     ;
 
 preprocessor_expression
-    returns[String value]
+    returns[string value]
     : TRUE { this.OnPreprocessorExpressionTrue(); }
     | FALSE { this.OnPreprocessorExpressionFalse(); }
     | CONDITIONAL_SYMBOL { this.OnPreprocessorExpressionConditionalSymbol(); }
