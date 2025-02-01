@@ -38,9 +38,14 @@ def apply_syntax_highlighting(text_widget, lexer):
         else:
             tag = 'default'
 
+        # Получаем позиции токена
+        start = token.start  # Начальный индекс токена
+        stop = token.stop + 1  # Конечный индекс токена
         # Подсветка токена
-        start_index = f"1.0+{token.startIndex}c"
-        end_index = f"1.0+{token.stopIndex + 1}c"
+        #start_index = f"1.0+{token.startIndex}c"
+        #end_index = f"1.0+{token.stopIndex + 1}c"
+        start_index = f"1.0+{start}c"
+        end_index = f"1.0+{stop}c"
         text_widget.tag_add(tag, start_index, end_index)
 
         token = lexer.nextToken()

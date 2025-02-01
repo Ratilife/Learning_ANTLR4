@@ -12,7 +12,7 @@ class PythonSyntaxHighlighter(QSyntaxHighlighter):
             'comment': self.create_format('gray', 'italic'),
             'default': self.create_format('black'),
         }
-
+    #устанавливает цвет и атрибуты текста (жирный, курсив)
     def create_format(self, color, style=''):
         fmt = QTextCharFormat()
         fmt.setForeground(QColor(color))
@@ -21,7 +21,7 @@ class PythonSyntaxHighlighter(QSyntaxHighlighter):
         if 'italic' in style:
             fmt.setFontItalic(True)
         return fmt
-
+    #Выполняет лексический анализ строки
     def highlightBlock(self, text):
         lexer = PythonLexer(InputStream(text))
         token = lexer.nextToken()
