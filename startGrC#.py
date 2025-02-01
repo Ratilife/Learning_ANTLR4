@@ -34,7 +34,21 @@ lexer = CSharpLexer(input_stream)
 token_stream = CommonTokenStream(lexer)
 parser = CSharpParser(token_stream)
 tree = parser.compilation_unit()
+'''
+try:
+    with open("C#Example.cs", "r", encoding="utf-8") as file:
+        code = file.read()
+except UnicodeDecodeError:
+    print("Ошибка: Не удалось декодировать файл. Проверьте кодировку файла.")
+    exit(1)
 
+# Создание потока ввода для ANTLR
+input_stream = InputStream(code)
+lexer = CSharpLexer(input_stream)
+token_stream = CommonTokenStream(lexer)
+parser = CSharpParser(token_stream)
+tree = parser.compilation_unit()
+'''
 # Создание графа
 graph = Digraph(format="png", graph_attr={"rankdir": "TB"})
 visit_tree(tree, graph)
