@@ -9,3 +9,4 @@ preprocessor_tokens = CommonTokenStream(preprocessor_lexer)
 preprocessor_parser = CSharpPreprocessorParser(preprocessor_tokens)
 preprocessed_tree = preprocessor_parser.compilation_unit()
 # ... дальше работа с preprocessed_tree (возможно, трансформация в другой поток токенов)
+
