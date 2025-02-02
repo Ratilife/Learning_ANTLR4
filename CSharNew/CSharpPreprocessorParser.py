@@ -590,7 +590,7 @@ class CSharpPreprocessorParser ( CSharpPreprocessorParserBase ):
                 self.match(CSharpPreprocessorParser.CONDITIONAL_SYMBOL)
                 self.state = 8
                 self.directive_new_line_or_sharp()
-                 this.OnPreprocessorDirectiveDefine(); 
+                this.OnPreprocessorDirectiveDefine(); 
                 pass
             elif token in [184]:
                 localctx = CSharpPreprocessorParser.PreprocessorDeclarationContext(self, localctx)
