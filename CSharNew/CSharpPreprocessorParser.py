@@ -601,7 +601,7 @@ class CSharpPreprocessorParser ( CSharpPreprocessorParserBase ):
                 self.match(CSharpPreprocessorParser.CONDITIONAL_SYMBOL)
                 self.state = 13
                 self.directive_new_line_or_sharp()
-                 this.OnPreprocessorDirectiveUndef(); 
+                this.OnPreprocessorDirectiveUndef(); 
                 pass
             elif token in [52]:
                 localctx = CSharpPreprocessorParser.PreprocessorConditionalContext(self, localctx)
@@ -612,7 +612,7 @@ class CSharpPreprocessorParser ( CSharpPreprocessorParserBase ):
                 localctx.expr = self.preprocessor_expression(0)
                 self.state = 18
                 self.directive_new_line_or_sharp()
-                 this.OnPreprocessorDirectiveIf(); 
+                this.OnPreprocessorDirectiveIf(); 
                 pass
             elif token in [185]:
                 localctx = CSharpPreprocessorParser.PreprocessorConditionalContext(self, localctx)
@@ -623,7 +623,7 @@ class CSharpPreprocessorParser ( CSharpPreprocessorParserBase ):
                 localctx.expr = self.preprocessor_expression(0)
                 self.state = 23
                 self.directive_new_line_or_sharp()
-                 this.OnPreprocessorDirectiveElif(); 
+                this.OnPreprocessorDirectiveElif(); 
                 pass
             elif token in [36]:
                 localctx = CSharpPreprocessorParser.PreprocessorConditionalContext(self, localctx)
@@ -632,7 +632,7 @@ class CSharpPreprocessorParser ( CSharpPreprocessorParserBase ):
                 self.match(CSharpPreprocessorParser.ELSE)
                 self.state = 27
                 self.directive_new_line_or_sharp()
-                 this.OnPreprocessorDirectiveElse(); 
+                this.OnPreprocessorDirectiveElse(); 
                 pass
             elif token in [186]:
                 localctx = CSharpPreprocessorParser.PreprocessorConditionalContext(self, localctx)
@@ -641,7 +641,7 @@ class CSharpPreprocessorParser ( CSharpPreprocessorParserBase ):
                 self.match(CSharpPreprocessorParser.ENDIF)
                 self.state = 31
                 self.directive_new_line_or_sharp()
-                 this.OnPreprocessorDirectiveEndif(); 
+                this.OnPreprocessorDirectiveEndif(); 
                 pass
             elif token in [187]:
                 localctx = CSharpPreprocessorParser.PreprocessorLineContext(self, localctx)
@@ -676,7 +676,7 @@ class CSharpPreprocessorParser ( CSharpPreprocessorParserBase ):
 
                 self.state = 43
                 self.directive_new_line_or_sharp()
-                 this.OnPreprocessorDirectiveLine(); 
+                this.OnPreprocessorDirectiveLine(); 
                 pass
             elif token in [188]:
                 localctx = CSharpPreprocessorParser.PreprocessorDiagnosticContext(self, localctx)
@@ -687,7 +687,7 @@ class CSharpPreprocessorParser ( CSharpPreprocessorParserBase ):
                 self.match(CSharpPreprocessorParser.TEXT)
                 self.state = 48
                 self.directive_new_line_or_sharp()
-                 this.OnPreprocessorDirectiveError(); 
+                this.OnPreprocessorDirectiveError(); 
                 pass
             elif token in [189]:
                 localctx = CSharpPreprocessorParser.PreprocessorDiagnosticContext(self, localctx)
@@ -698,7 +698,7 @@ class CSharpPreprocessorParser ( CSharpPreprocessorParserBase ):
                 self.match(CSharpPreprocessorParser.TEXT)
                 self.state = 53
                 self.directive_new_line_or_sharp()
-                 this.OnPreprocessorDirectiveWarning(); 
+                this.OnPreprocessorDirectiveWarning(); 
                 pass
             elif token in [190]:
                 localctx = CSharpPreprocessorParser.PreprocessorRegionContext(self, localctx)
@@ -715,7 +715,7 @@ class CSharpPreprocessorParser ( CSharpPreprocessorParserBase ):
 
                 self.state = 60
                 self.directive_new_line_or_sharp()
-                 this.OnPreprocessorDirectiveRegion(); 
+                this.OnPreprocessorDirectiveRegion(); 
                 pass
             elif token in [191]:
                 localctx = CSharpPreprocessorParser.PreprocessorRegionContext(self, localctx)
@@ -732,7 +732,7 @@ class CSharpPreprocessorParser ( CSharpPreprocessorParserBase ):
 
                 self.state = 67
                 self.directive_new_line_or_sharp()
-                 this.OnPreprocessorDirectiveEndregion(); 
+                this.OnPreprocessorDirectiveEndregion(); 
                 pass
             elif token in [192]:
                 localctx = CSharpPreprocessorParser.PreprocessorPragmaContext(self, localctx)
@@ -743,7 +743,7 @@ class CSharpPreprocessorParser ( CSharpPreprocessorParserBase ):
                 self.match(CSharpPreprocessorParser.TEXT)
                 self.state = 72
                 self.directive_new_line_or_sharp()
-                 this.OnPreprocessorDirectivePragma(); 
+                this.OnPreprocessorDirectivePragma(); 
                 pass
             elif token in [193]:
                 localctx = CSharpPreprocessorParser.PreprocessorNullableContext(self, localctx)
@@ -754,7 +754,7 @@ class CSharpPreprocessorParser ( CSharpPreprocessorParserBase ):
                 self.match(CSharpPreprocessorParser.TEXT)
                 self.state = 77
                 self.directive_new_line_or_sharp()
-                 this.OnPreprocessorDirectiveNullable(); 
+                this.OnPreprocessorDirectiveNullable(); 
                 pass
             else:
                 raise NoViableAltException(self)
@@ -894,17 +894,17 @@ class CSharpPreprocessorParser ( CSharpPreprocessorParserBase ):
             if token in [96]:
                 self.state = 85
                 self.match(CSharpPreprocessorParser.TRUE)
-                 this.OnPreprocessorExpressionTrue(); 
+                this.OnPreprocessorExpressionTrue(); 
                 pass
             elif token in [42]:
                 self.state = 87
                 self.match(CSharpPreprocessorParser.FALSE)
-                 this.OnPreprocessorExpressionFalse(); 
+                this.OnPreprocessorExpressionFalse(); 
                 pass
             elif token in [195]:
                 self.state = 89
                 self.match(CSharpPreprocessorParser.CONDITIONAL_SYMBOL)
-                 this.OnPreprocessorExpressionConditionalSymbol(); 
+                this.OnPreprocessorExpressionConditionalSymbol(); 
                 pass
             elif token in [129]:
                 self.state = 91
@@ -913,14 +913,14 @@ class CSharpPreprocessorParser ( CSharpPreprocessorParserBase ):
                 localctx.expr = self.preprocessor_expression(0)
                 self.state = 93
                 self.match(CSharpPreprocessorParser.CLOSE_PARENS)
-                 this.OnPreprocessorExpressionConditionalOpenParens(); 
+                this.OnPreprocessorExpressionConditionalOpenParens(); 
                 pass
             elif token in [143]:
                 self.state = 96
                 self.match(CSharpPreprocessorParser.BANG)
                 self.state = 97
                 localctx.expr = self.preprocessor_expression(5)
-                 this.OnPreprocessorExpressionConditionalBang(); 
+                this.OnPreprocessorExpressionConditionalBang(); 
                 pass
             else:
                 raise NoViableAltException(self)
@@ -949,7 +949,7 @@ class CSharpPreprocessorParser ( CSharpPreprocessorParserBase ):
                         self.match(CSharpPreprocessorParser.OP_EQ)
                         self.state = 104
                         localctx.expr2 = self.preprocessor_expression(5)
-                         this.OnPreprocessorExpressionConditionalEq(); 
+                        this.OnPreprocessorExpressionConditionalEq(); 
                         pass
 
                     elif la_ == 2:
@@ -964,7 +964,7 @@ class CSharpPreprocessorParser ( CSharpPreprocessorParserBase ):
                         self.match(CSharpPreprocessorParser.OP_NE)
                         self.state = 109
                         localctx.expr2 = self.preprocessor_expression(4)
-                         this.OnPreprocessorExpressionConditionalNe(); 
+                        this.OnPreprocessorExpressionConditionalNe(); 
                         pass
 
                     elif la_ == 3:
@@ -979,7 +979,7 @@ class CSharpPreprocessorParser ( CSharpPreprocessorParserBase ):
                         self.match(CSharpPreprocessorParser.OP_AND)
                         self.state = 114
                         localctx.expr2 = self.preprocessor_expression(3)
-                         this.OnPreprocessorExpressionConditionalAnd(); 
+                        this.OnPreprocessorExpressionConditionalAnd(); 
                         pass
 
                     elif la_ == 4:
@@ -994,7 +994,7 @@ class CSharpPreprocessorParser ( CSharpPreprocessorParserBase ):
                         self.match(CSharpPreprocessorParser.OP_OR)
                         self.state = 119
                         localctx.expr2 = self.preprocessor_expression(2)
-                         this.OnPreprocessorExpressionConditionalOr(); 
+                        this.OnPreprocessorExpressionConditionalOr(); 
                         pass
 
              
