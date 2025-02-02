@@ -2,6 +2,7 @@ from antlr4 import *
 from CSharNew.CSharpLexer import CSharpLexer
 from CSharNew.CSharpParser  import CSharpParser 
 from CSharNew.CSharpPreprocessorParser  import CSharpPreprocessorParser 
+from CSharNew.CSharpPreprocessorLexer import CSharpPreprocessorLexer
 from graphviz import Digraph
 
 # Функция для безопасного создания имени узла
