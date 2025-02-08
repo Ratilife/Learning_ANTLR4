@@ -155,9 +155,9 @@ class CSharpPreprocessorParser ( CSharpPreprocessorParserBase ):
                       "NULLABLE", "DIRECTIVE_HIDDEN", "CONDITIONAL_SYMBOL", 
                       "DIRECTIVE_NEW_LINE", "TEXT", "DOUBLE_CURLY_CLOSE_INSIDE" ]
 
-    RULE_preprocessor_directive = 0
-    RULE_directive_new_line_or_sharp = 1
-    RULE_preprocessor_expression = 2
+    RULE_preprocessor_directive = 0                 #Директива препроцессора ПРАВИЛ
+    RULE_directive_new_line_or_sharp = 1            #Директива по правилу новая линия или диез
+    RULE_preprocessor_expression = 2                #Выражение препроцессора ПРАВИЛ
 
     ruleNames =  [ "preprocessor_directive", "directive_new_line_or_sharp", 
                    "preprocessor_expression" ]
@@ -372,21 +372,21 @@ class CSharpPreprocessorParser ( CSharpPreprocessorParserBase ):
 
 
     class Preprocessor_directiveContext(ParserRuleContext):
-        __slots__ = 'parser'
+        __slots__ = 'parser'         # Определяет, что класс будет использовать только указанные атрибуты для экономии памяти.
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
-            super().__init__(parent, invokingState)
-            self.parser = parser
-            self.value = None
+            super().__init__(parent, invokingState)  # Инициализация родительского класса ParserRuleContext.
+            self.parser = parser                     # Сохранение ссылки на экземпляр парсера.  
+            self.value = None                        # Инициализация атрибута value, который будет хранить значение директивы.
 
 
         def getRuleIndex(self):
-            return CSharpPreprocessorParser.RULE_preprocessor_directive
+            return CSharpPreprocessorParser.RULE_preprocessor_directive  # Возвращает индекс правила, соответствующий данной директиве. Это 0
 
      
         def copyFrom(self, ctx:ParserRuleContext):
-            super().copyFrom(ctx)
-            self.value = ctx.value
+            super().copyFrom(ctx)                       # Копирует данные из другого контекста ParserRuleContext.
+            self.value = ctx.value                      # Копирует значение из контекста ctx в текущий объект.
 
 
 

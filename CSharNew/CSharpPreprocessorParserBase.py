@@ -2,7 +2,9 @@ from antlr4 import Parser
 
 class CSharpPreprocessorParserBase(Parser):
     def __init__(self, input_stream, output=None, error_output=None):
-        super().__init__(input_stream, output, error_output)
+        #super().__init__(input_stream, output, error_output)
+        super().__init__(input_stream, output)
+
         self.conditions = [True]
         self.ConditionalSymbols = {"DEBUG"}
 

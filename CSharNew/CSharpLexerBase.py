@@ -3,7 +3,8 @@ from collections import deque
 
 class CSharpLexerBase(Lexer):
     def __init__(self, input_stream, output=None, error_output=None):
-        super().__init__(input_stream, output, error_output)
+        #super().__init__(input_stream, output, error_output)
+        super().__init__(input_stream, output,)
         self._input = input_stream
         self.interpolatedStringLevel = 0
         self.interpolatedVerbatiums = deque()

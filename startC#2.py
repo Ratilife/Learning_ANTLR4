@@ -32,13 +32,13 @@ def visit_tree(node, graph, parent_name=None):
 
 # Чтение C#-кода
 input_stream = FileStream("C#Example.cs", encoding="utf-8")
-
+'''
 # Предварительная обработка
 preprocessor_lexer = CSharpPreprocessorLexer(input_stream)
 preprocessor_tokens = CommonTokenStream(preprocessor_lexer)
 preprocessor_parser = CSharpPreprocessorParser(preprocessor_tokens)
 preprocessed_tree = preprocessor_parser.compilation_unit()
-
+'''
 # Создание нового потока токенов для основного парсера
 input_stream.seek(0)  # Вернуться к началу файла для повторного чтения
 lexer = CSharpLexer(input_stream)
@@ -50,7 +50,7 @@ tree = parser.compilation_unit()    # Получаем синтаксическ�
 graph = Digraph(format="png", graph_attr={"rankdir": "TB"})
 
 # Обход дерева разбора
-visit_tree(preprocessed_tree, graph)
+visit_tree(tree, graph)
 
 # Сохранение дерева
 output_path = graph.render("preprocessed_parse_tree")
