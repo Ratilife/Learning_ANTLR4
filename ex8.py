@@ -1,7 +1,7 @@
-from graphviz import Digraph
+import PySimpleGUI as sg
 from antlr4 import *
 from Python3.PythonLexer import PythonLexer
-from CShar.CSharpLexer import CSharpLexer
+from CSharNew.CSharpLexer import CSharpLexer
 
 
 
@@ -85,119 +85,118 @@ def apply_syntax_highlighting_CShar(text_widget, text):
     
     # Цвета для подсветки
     colors = {
-                'SINGLE_LINE_DOC_COMMENT'     : '///' InputCharacter*   -> channel(COMMENTS_CHANNEL);
-                'EMPTY_DELIMITED_DOC_COMMENT' : '/***/'                 -> channel(COMMENTS_CHANNEL);
-                'DELIMITED_DOC_COMMENT'       : '/**' ~'/' .*? '*/'     -> channel(COMMENTS_CHANNEL);
-                'SINGLE_LINE_COMMENT'         : '//' InputCharacter*    -> channel(COMMENTS_CHANNEL);
-                'DELIMITED_COMMENT'           : '/*' .*? '*/'           -> channel(COMMENTS_CHANNEL);
-                'WHITESPACES'                 : (Whitespace | NewLine)+ -> channel(HIDDEN);
-                'SHARP'                       : 'orange'                    
+                'SINGLE_LINE_DOC_COMMENT'     : 'green',   
+                'EMPTY_DELIMITED_DOC_COMMENT' :  '#006400',
+                'DELIMITED_DOC_COMMENT'       : '#006400', 
+                'SINGLE_LINE_COMMENT'         : '#006400',
+                'DELIMITED_COMMENT'           : '#006400', 
+                'SHARP'                       : 'orange',                    
 
-                'ABSTRACT'   : 'abstract';
-                'ADD'        : 'add';
-                'ALIAS'      : 'alias';
-                'ARGLIST'    : '__arglist';
-                'AS'         : 'as';
-                'ASCENDING'  : 'ascending';
-                'ASYNC'      : 'async';
-                'AWAIT'      : 'await';
-                'BASE'       : 'base';
-                'BOOL'       : 'bool';
-                'BREAK'      : 'break';
-                'BY'         : 'by';
-                'BYTE'       : 'byte';
-                'CASE'       : 'case';
-                'CATCH'      : 'catch';
-                'CHAR'       : 'char';
-                'CHECKED'    : 'checked';
-                'CLASS'      : 'class';
-                'CONST'      : 'const';
-                'CONTINUE'   : 'continue';
-                'DECIMAL'    : 'decimal';
-                'DEFAULT'    : 'default';
-                'DELEGATE'   : 'delegate';
-                'DESCENDING' : 'descending';
-                'DO'         : 'do';
-                'DOUBLE'     : 'double';
-                'DYNAMIC'    : 'dynamic';
-                'ELSE'       : 'else';
-                'ENUM'       : 'enum';
-                'EQUALS'     : 'equals';
-                'EVENT'      : 'event';
-                'EXPLICIT'   : 'explicit';
-                'EXTERN'     : 'extern';
-                'FALSE'      : 'false';
-                'FINALLY'    : 'finally';
-                'FIXED'      : 'fixed';
-                'FLOAT'      : 'float';
-                'FOR'        : 'for';
-                'FOREACH'    : 'foreach';
-                'FROM'       : 'from';
-                'GET'        : 'get';
-                'GOTO'       : 'goto';
-                'GROUP'      : 'group';
-                'IF'         : 'if';
-                'IMPLICIT'   : 'implicit';
-                'IN'         : 'in';
-                'INT'        : 'int';
-                'INTERFACE'  : 'interface';
-                'INTERNAL'   : 'internal';
-                'INTO'       : 'into';
-                'IS'         : 'is';
-                'JOIN'       : 'join';
-                'LET'        : 'let';
-                'LOCK'       : 'lock';
-                'LONG'       : 'long';
-                'NAMEOF'     : 'nameof';
-                'NAMESPACE'  : 'namespace';
-                'NEW'        : 'new';
-                'NULL_'      : 'null';
-                'OBJECT'     : 'object';
-                'ON'         : 'on';
-                'OPERATOR'   : 'operator';
-                'ORDERBY'    : 'orderby';
-                'OUT'        : 'out';
-                'OVERRIDE'   : 'override';
-                'PARAMS'     : 'params';
-                'PARTIAL'    : 'partial';
-                'PRIVATE'    : 'private';
-                'PROTECTED'  : 'protected';
-                'PUBLIC'     : 'public';
-                'READONLY'   : 'readonly';
-                'REF'        : 'ref';
-                'REMOVE'     : 'remove';
-                'RETURN'     : 'return';
-                'SBYTE'      : 'sbyte';
-                'SEALED'     : 'sealed';
-                'SELECT'     : 'select';
-                'SET'        : 'set';
-                'SHORT'      : 'short';
-                'SIZEOF'     : 'sizeof';
-                'STACKALLOC' : 'stackalloc';
-                'STATIC'     : 'static';
-                'STRING'     : 'string';
-                'STRUCT'     : 'struct';
-                'SWITCH'     : 'switch';
-                'THIS'       : 'this';
-                'THROW'      : 'throw';
-                'TRUE'       : 'true';
-                'TRY'        : 'try';
-                'TYPEOF'     : 'typeof';
-                'UINT'       : 'uint';
-                'ULONG'      : 'ulong';
-                'UNCHECKED'  : 'unchecked';
-                'UNMANAGED'  : 'unmanaged';
-                'UNSAFE'     : 'unsafe';
-                'USHORT'     : 'ushort';
-                'USING'      : 'using';
-                'VAR'        : 'var';
-                'VIRTUAL'    : 'virtual';
-                'VOID'       : 'void';
-                'VOLATILE'   : 'volatile';
-                'WHEN'       : 'when';
-                'WHERE'      : 'where';
-                'WHILE'      : 'while';
-                'YIELD'      : 'yield';
+                'ABSTRACT'   : '#00008B',                #Объявление классов и интерфейсов
+                'ADD'        : '#8B0000',                #Управляющие конструкции
+                'ALIAS'      : '#8B0000',                #Другие ключевые слова
+                'ARGLIST'    : 'blue',                   #Объявление переменных
+                'AS'         : '#8B0000',                #Операторы и выражения
+                'ASCENDING'  : 'blue',                   #Объявление переменных
+                'ASYNC'      : '#DC143C',                #Асинхронность
+                'AWAIT'      : '#DC143C',                #Асинхронность
+                'BASE'       : '#00008B',                #Объявление классов и интерфейсов
+                'BOOL'       : 'purple',                 #Типы данных
+                'BREAK'      : '#8B0000',                #Управление потоком выполнения
+                'BY'         : '#C0C0C0',                #Управление данными и выборка
+                'BYTE'       : 'purple',                 #Типы данных
+                'CASE'       : '#8B0000',                #Условные конструкции
+                'CATCH'      : '#8B0000',                #Управляющие конструкции
+                'CHAR'       : 'purple',                 #Типы данных
+                'CHECKED'    : '#8B0000',                # Другие ключевые слова
+                'CLASS'      : '#00008B',                #Объявление классов и интерфейсов
+                'CONST'      : 'blue',                   # Другие ключевые слова
+                'CONTINUE'   : '#8B0000',                #Управление потоком выполнения
+                'DECIMAL'    : 'purple',                 #Типы данных
+                'DEFAULT'    : '#8B0000',                #Условные конструкции
+                'DELEGATE'   : '#FFDB58',                #Делегаты и события               
+                'DESCENDING' : 'blue',                   #Объявление переменных
+                'DO'         : '#8B0000',                #Циклы
+                'DOUBLE'     : 'purple',                 #Типы данных
+                'DYNAMIC'    : 'purple',                 #Типы данных
+                'ELSE'       : '#8B0000',                #Условные конструкции
+                'ENUM'       : '#00008B',                #Объявление классов и интерфейсов
+                'EQUALS'     : '#8B0000',                #Операторы и выражения
+                'EVENT'      : '#FFDB58',                #Делегаты и события
+                'EXPLICIT'   : 'explicit',               #Преобразования типов
+                'EXTERN'     : 'blue',                   #Объявление переменных
+                'FALSE'      : '#FF8C00',                #Объявление типов
+                'FINALLY'    : '#8B0000',                #Управляющие конструкции
+                'FIXED'      : 'blue',                   #Объявление переменных
+                'FLOAT'      : 'purple',                 #Типы данных
+                'FOR'        : '#8B0000',                #Циклы
+                'FOREACH'    : '#8B0000',                #Циклы
+                'FROM'       : '#C0C0C0',                #Управление данными и выборка
+                'GET'        : 'blue',                   #Объявление переменных
+                'GOTO'       : '#8B0000',                #Управляющие конструкции
+                'GROUP'      : '#C0C0C0',                #Управление данными и выборка
+                'IF'         : '#8B0000',                #Условные конструкции
+                'IMPLICIT'   : 'implicit',               #Преобразования типов
+                'IN'         : '#8B0000',                #Операторы и выражения
+                'INT'        : 'purple',                 #Типы данных
+                'INTERFACE'  : '#00008B',                #Объявление классов и интерфейсов
+                'INTERNAL'   : '#FF8C00',                #Модификаторы доступа
+                'INTO'       : '#C0C0C0',                #Управление данными и выборка
+                'IS'         :'#8B0000',                 #Операторы и выражения
+                'JOIN'       : '#C0C0C0',                #Управление данными и выборка
+                'LET'        : '#C0C0C0',                #Управление данными и выборка
+                'LOCK'       : '#8B0000',                #Управляющие конструкции
+                'LONG'       : 'purple',                 #Типы данных
+                'NAMEOF'     : 'blue',                   #Объявление переменных
+                'NAMESPACE'  : 'blue',                   #Объявление переменных
+                'NEW'        : 'blue',                   #Объявление переменных
+                'NULL_'      : '#FF8C00',                #Объявление типов
+                'OBJECT'     : 'purple',                 #Типы данных
+                'ON'         : '#8B0000',                #Операторы и выражения
+                'OPERATOR'   : '#00008B',                #Объявление классов и интерфейсов
+                'ORDERBY'    : '#C0C0C0',                #Управление данными и выборка
+                'OUT'        : '#8B0000',                #Управление потоком выполнения
+                'OVERRIDE'   : '#00008B',                #Объявление классов и интерфейсов
+                'PARAMS'     : 'params',                 #Управление доступом и структурирование кода
+                'PARTIAL'    : '#00008B',                #Объявление классов и интерфейсов
+                'PRIVATE'    : '#FF8C00',                #Модификаторы доступа
+                'PROTECTED'  : '#FF8C00',                #Модификаторы доступа
+                'PUBLIC'     : '#FF8C00',                #Модификаторы доступа
+                'READONLY'   : '#8B0000',                # Другие ключевые слова
+                'REF'        : '#8B0000',                #Управление потоком выполнения
+                'REMOVE'     : '#8B0000',                #Управление потоком выполнения
+                'RETURN'     : '#8B0000',                #Управление потоком выполнения
+                'SBYTE'      : 'purple',                 #Типы данных
+                'SEALED'     : '#00008B',                #Объявление классов и интерфейсов
+                'SELECT'     : '#C0C0C0',                #Управление данными и выборка
+                'SET'        : 'blue',                   #Объявление переменных
+                'SHORT'      : 'purple',                 #Типы данных
+                'SIZEOF'     : '#8B0000',                #Управление потоком выполнения
+                'STACKALLOC' : '#8B0000',                #Управление потоком выполнения
+                'STATIC'     : '#00008B',                #Объявление классов и интерфейсов
+                'STRING'     : 'purple',                 #Типы данных
+                'STRUCT'     : '#00008B',                #Объявление классов и интерфейсов
+                'SWITCH'     : '#8B0000',                #Условные конструкции
+                'THIS'       : '#00008B',                #Объявление классов и интерфейсов
+                'THROW'      : '#8B0000',                #Управляющие конструкции
+                'TRUE'       : '#FF8C00',                #Объявление типов
+                'TRY'        : '#8B0000',                #Управляющие конструкции
+                'TYPEOF'     : 'blue',                   #Объявление переменных
+                'UINT'       : 'purple',                 #Типы данных
+                'ULONG'      : 'purple',                 #Типы данных
+                'UNCHECKED'  : 'blue',                   #Объявление переменных
+                'UNMANAGED'  : 'blue',                   #Объявление переменных
+                'UNSAFE'     : 'blue',                   #Объявление переменных
+                'USHORT'     : 'purple',                 #Типы данных
+                'USING'      : 'blue',                   #Объявление переменных
+                'VAR'        : 'blue',                   #Объявление переменных
+                'VIRTUAL'    : '#00008B',                #Объявление классов и интерфейсов
+                'VOID'       : '#00008B',                #Объявление классов и интерфейсов
+                'VOLATILE'   : '#8B0000',                # Другие ключевые слова
+                'WHEN'       : '#8B0000',                #Условные конструкции
+                'WHERE'      : '#C0C0C0',                #Управление данными и выборка
+                'WHILE'      : '#8B0000',                #Циклы
+                'YIELD'      : '#8B0000',                # Другие ключевые слова
     }
 
     # Проходим по токенам
@@ -218,3 +217,80 @@ def apply_syntax_highlighting_CShar(text_widget, text):
             text_widget.Widget.tag_configure(token_type, foreground=colors[token_type])
 
         token = lexer.nextToken()
+
+# Создаем интерфейс
+
+textPy = "Введите код Python:"
+textCharp = "Введите код C#:"
+# Radio кнопки создаются внутри Frame
+radio_frame = sg.Frame(layout=[
+    [sg.Radio('Python', "RADIO1", key="RADIO_PY", default=True, size=(10, 1)),
+     sg.Radio('C#', "RADIO1", key="RADIO_CSHARP")]  # Добавляем ключи
+],
+    title='Языки', title_color='blue',)
+ 
+layout = [
+    [sg.Text(textPy, key="-TEXT_LABEL-")],  # Изначально отображаем текст для Python
+    [radio_frame],
+    [
+        sg.Multiline(
+            size=(80, 20),
+            key="-TEXT-",
+            enable_events=True,
+            font=("Courier", 12),
+            autoscroll=False,
+        )
+    ],
+    [sg.Button("Подсветить синтаксис")],
+]
+
+
+window = sg.Window("Python/С# Syntax Highlighter", layout, finalize=True)
+
+# Настройка переноса текста для Multiline
+text_widget = window["-TEXT-"]
+text_widget.Widget.configure(wrap="word")
+
+# Функция для выбора языка и обновления текста
+def update_language(window, values):
+    if values["RADIO_PY"]:  # Используем ключ Python Radio
+        window["-TEXT_LABEL-"].update(textPy)
+        return "Python"
+    else:  # Используем ключ C# Radio
+        window["-TEXT_LABEL-"].update(textCharp)
+        return "C#"
+
+
+# Обработка событий
+while True:
+    event, values = window.read()
+    if event == sg.WINDOW_CLOSED:
+        break
+    selected_language = update_language(window, values)  # Обновляем язык
+    if event == "-TEXT-":  # Событие изменения текста (включает копирование/вставку)
+        text = values["-TEXT-"]
+        # Убираем вызов подсветки здесь, чтобы избежать проблем с вставкой
+        continue
+        
+    elif event == "Подсветить синтаксис":  # Явная кнопка для подсветки
+        text = values["-TEXT-"]
+        
+        
+        # Выбор функции подсветки в зависимости от языка
+        if selected_language == "Python":
+            apply_syntax_highlighting_PY(text_widget, text)
+        else:
+            apply_syntax_highlighting_CShar(text_widget, text)
+    '''
+    # Обновление текста в зависимости от выбранного языка
+    if event in ("RADIO1", "RADIO2"):  # Проверяем, изменился ли выбор языка
+        if window["RADIO1"].get():  # Если выбран Python
+            window["-TEXT-"].update("")  # Очищаем текстовое поле
+            window["-TEXT-"].Widget.configure(wrap="word")  # Настройка переноса текста
+            window["-TEXT-"].update(textPy)  # Обновляем текст
+        else:  # Если выбран C#
+            window["-TEXT-"].update("")  # Очищаем текстовое поле
+            window["-TEXT-"].Widget.configure(wrap="word")  # Настройка переноса текста
+            window["-TEXT-"].update(textCharp)  # Обновляем текст
+    '''        
+window.close()

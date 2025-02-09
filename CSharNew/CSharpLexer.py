@@ -1285,14 +1285,13 @@ class CSharpLexer(CSharpLexerBase):
             self.OnInterpolatedVerbatiumStringStart()
 
     def OPEN_BRACE_action(self, localctx:RuleContext , actionIndex:int):
-        if actionIndex == 2:
-             #this.OnOpenBrace(); 
-             self.OnOpenBrace() 
+        if actionIndex == 2:  
+            self.OnOpenBrace() 
 
     def CLOSE_BRACE_action(self, localctx:RuleContext , actionIndex:int):
         if actionIndex == 3:
              #this.OnCloseBrace(); 
-             self.OnCloseBrace()
+            self.OnCloseBrace()
 
     def COLON_action(self, localctx:RuleContext , actionIndex:int):
         if actionIndex == 4:
