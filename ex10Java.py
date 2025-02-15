@@ -1,6 +1,6 @@
 import PySimpleGUI as sg
 from antlr4 import *
-from java.Java20Lexer import Java20Lexer
+from Java.Java20Lexer import Java20Lexer
 
 def apply_syntax_highlighting(text_widget, text):
     # Очистка форматирования
@@ -12,6 +12,147 @@ def apply_syntax_highlighting(text_widget, text):
     token = lexer.nextToken()
 
      # Цвета для подсветки
+    colors = {
+    # Модификаторы и ключевые слова управления пакетами/модулями
+    'EXPORTS'     : '#8B4513',  # Brown (кирпичный, указывает на "открытость")
+    'MODULE'      : '#8B4513',
+    'OACA'        : '#2F4F4F',  # DarkSlateGray (для угловых скобок, как обрамление)
+    'OPEN'        : '#8B4513',
+    'OPENS'       : '#8B4513',
+    'PERMITS'     : '#8B4513',
+    'PROVIDES'    : '#8B4513',
+    'REQUIRES'    : '#8B4513',
+    'SEALED'      : '#8B4513',
+    'TO'          : '#8B4513',
+    'TRANSITIVE'  : '#8B4513',
+    'USES'        : '#8B4513',
+    'WITH'        : '#8B4513',
+    'YIELD'       : '#8B4513',
+    'PACKAGE'     : '#8B4513',
+
+    # Ключевые слова управления потоком выполнения
+    'ASSERT'      : '#005580',  # MediumBlue (для утверждений)
+    'BREAK'       : '#005580',
+    'CASE'        : '#005580',
+    'CATCH'       : '#005580',
+    'CONTINUE'    : '#005580',
+    'DEFAULT'     : '#005580',
+    'DO'          : '#005580',
+    'ELSE'        : '#005580',
+    'FOR'         : '#005580',
+    'IF'          : '#005580',
+    'GOTO'        : '#005580',
+    'INSTANCEOF'  : '#005580',
+    'RETURN'      : '#005580',
+    'SWITCH'      : '#005580',
+    'THROW'       : '#005580',
+    'THROWS'      : '#005580',
+    'TRY'         : '#005580',
+    'WHILE'       : '#005580',
+
+    # Типы данных
+    'BOOLEAN'     : '#008000',  # Green (для логических типов)
+    'BYTE'        : '#008000',
+    'CHAR'        : '#008000',
+    'DOUBLE'      : '#008000',
+    'FLOAT'       : '#008000',
+    'INT'         : '#008000',
+    'LONG'        : '#008000',
+    'SHORT'       : '#008000',
+    'VOID'        : '#008000',
+
+    # Объявление классов, интерфейсов, перечислений
+    'CLASS'       : '#B8860B',  # DarkGoldenRod (для классов и интерфейсов)
+    'ENUM'        : '#B8860B',
+    'INTERFACE'   : '#B8860B',
+    'RECORD'      : '#B8860B',  # Считаем Record похожим на класс
+
+    # Модификаторы доступа и другие ключевые слова
+    'ABSTRACT'    : '#A0522D',  # Sienna (для абстрактных элементов)
+    'FINAL'       : '#A0522D',
+    'NATIVE'      : '#A0522D',
+    'PRIVATE'     : '#A0522D',
+    'PROTECTED'   : '#A0522D',
+    'PUBLIC'      : '#A0522D',
+    'STATIC'      : '#A0522D',
+    'STRICTFP'    : '#A0522D',
+    'SYNCHRONIZED': '#A0522D',
+    'TRANSIENT'   : '#A0522D',
+    'VOLATILE'    : '#A0522D',
+    'CONST'       : '#A0522D',
+    'EXTENDS'     : '#A0522D',
+    'IMPLEMENTS'  : '#A0522D',
+
+    # Работа с памятью и объектами
+    'NEW'         : '#800080',  # Purple (для создания объектов)
+    'THIS'        : '#800080',
+    'SUPER'       : '#800080',
+
+    # Литералы
+    'NullLiteral'    : '#4682B4',  # SteelBlue (для null)
+    'BooleanLiteral' : '#4682B4',  # SteelBlue (для true/false)
+    'IntegerLiteral' : '#4682B4', # IntegerLiteral
+    'FloatingPointLiteral' : '#4682B4', # FloatingPointLiteral
+    'CharacterLiteral' : '#4682B4', # CharacterLiteral
+    'StringLiteral': '#4682B4', # StringLiteral
+    'TextBlock': '#4682B4', #TextBlock
+
+    # Разделители
+    'LPAREN'     : '#2F4F4F', # DarkSlateGray (скобки и знаки препинания)
+    'RPAREN'     : '#2F4F4F',
+    'LBRACE'     : '#2F4F4F',
+    'RBRACE'     : '#2F4F4F',
+    'LBRACK'     : '#2F4F4F',
+    'RBRACK'     : '#2F4F4F',
+    'SEMI'       : '#2F4F4F',
+    'COMMA'      : '#2F4F4F',
+    'DOT'        : '#2F4F4F',
+    'ELLIPSIS'   : '#2F4F4F',
+    'AT'         : '#2F4F4F',
+    'COLONCOLON' : '#2F4F4F',
+
+    # Операторы
+    'ASSIGN'     : '#000000',  # Black (для операторов)
+    'GT'         : '#000000',
+    'LT'         : '#000000',
+    'BANG'       : '#000000',
+    'TILDE'      : '#000000',
+    'QUESTION'   : '#000000',
+    'COLON'      : '#000000',
+    'ARROW'      : '#000000',
+    'EQUAL'      : '#000000',
+    'LE'         : '#000000',
+    'GE'         : '#000000',
+    'NOTEQUAL'   : '#000000',
+    'AND'        : '#000000',
+    'OR'         : '#000000',
+    'INC'        : '#000000',
+    'DEC'        : '#000000',
+    'ADD'        : '#000000',
+    'SUB'        : '#000000',
+    'MUL'        : '#000000',
+    'DIV'        : '#000000',
+    'BITAND'     : '#000000',
+    'BITOR'      : '#000000',
+    'CARET'      : '#000000',
+    'MOD'        : '#000000',
+    'ADD_ASSIGN' : '#000000',
+    'SUB_ASSIGN' : '#000000',
+    'MUL_ASSIGN' : '#000000',
+    'DIV_ASSIGN' : '#000000',
+    'AND_ASSIGN' : '#000000',
+    'OR_ASSIGN'  : '#000000',
+    'XOR_ASSIGN' : '#000000',
+    'MOD_ASSIGN' : '#000000',
+    'LSHIFT_ASSIGN'  : '#000000',
+    'RSHIFT_ASSIGN'  : '#000000',
+    'URSHIFT_ASSIGN' : '#000000',
+
+    # Прочее
+    'UNDER_SCORE' : '#2F4F4F',
+    'COMMENT'     : '#006400'  #  темно-зеленый (для комментариев)
+    }
+    '''     
     colors = {
         'EXPORTS'     :  'purple',  #Экспортирует пакет с модулем
         'MODULE'      :  'purple',
@@ -133,7 +274,7 @@ def apply_syntax_highlighting(text_widget, text):
         'RSHIFT_ASSIGN'  : '#991900',
         'URSHIFT_ASSIGN' : '#991900',
 
-    }
+    }'''    
     # Проходим по токенам
     while token.type != Token.EOF:
         token_type = lexer.symbolicNames[token.type]
