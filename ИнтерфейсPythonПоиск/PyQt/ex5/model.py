@@ -3,10 +3,18 @@ from typing import List
 
 @dataclass
 class ButtonModel:
+    '''
+    Это dataclass, который представляет собой модель данных для кнопки. Он содержит два поля: 
+    name (название кнопки) и path (путь к программе, которую нужно запустить).
+    '''
     name: str  # Название кнопки
     path: str  # Путь к программе
 
 class ButtonListModel:
+    '''
+    Этот класс управляет списком кнопок. Он предоставляет методы для добавления новой кнопки (add_button), 
+    получения списка всех кнопок (get_buttons) и получения конкретной кнопки по индексу (get_button).
+    '''
     def __init__(self):
         self._buttons: List[ButtonModel] = []  # Список кнопок
 
