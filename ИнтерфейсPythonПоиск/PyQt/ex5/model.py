@@ -31,3 +31,18 @@ class ButtonListModel:
         if 0 <= index < len(self._buttons):
             return self._buttons[index]
         return None
+    
+    def remove_button(self, index: int):
+        if 0 <= index < len(self._buttons):
+            self._buttons.pop(index)
+
+    def edit_button(self, index: int, name: str, path: str):
+        if 0 <= index < len(self._buttons):
+            self._buttons[index].name = name
+            self._buttons[index].path = path        
+
+    def is_valid_button(self, name: str, path: str) -> bool:
+        return bool(name.strip()) and os.path.exists(path)        
+    
+    def sort_buttons(self, key=lambda button: button.name):
+        self._buttons.sort(key=key)

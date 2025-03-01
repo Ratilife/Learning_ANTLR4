@@ -23,3 +23,19 @@ class ButtonViewModel(QObject):
         if button:
             import os
             os.startfile(button.path)  # Запуск программы
+
+    def remove_button(self, index: int):
+        self._model.remove_button(index)
+        self.buttonsChanged.emit()        
+
+    def edit_button(self, index: int, name: str, path: str):
+        if self._model.is_valid_button(name, path):
+            self._model.edit_button(index, name, path)
+            self.buttonsChanged.emit()    
+
+    def sort_buttons(self):
+        self._model.sort_buttons()
+        self.buttonsChanged.emit()        
+
+    def is_valid_button(self, name: str, path: str) -> bool:
+        return self._model.is_valid_button(name, path)    
