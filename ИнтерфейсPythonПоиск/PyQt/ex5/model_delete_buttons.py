@@ -1,15 +1,10 @@
 from typing import List, Dict
+from model import ButtonListModel  # Предполагается, что ButtonListModel определен в модуле model
 
 class DeleteButtonsModel:
-    def __init__(self, buttons: List[Dict[str, str]]):
-        self._buttons = buttons  # Список кнопок с именами и путями
-        self._selected_buttons = {button["name"]: False for button in buttons}  # Словарь для хранения отметок
-
-    def get_buttons(self) -> List[Dict[str, str]]:
-        """
-        Возвращает список кнопок.
-        """
-        return self._buttons
+    def __init__(self, model: ButtonListModel):
+        self._model = model  # Ссылка на ButtonListModel
+        self._selected_buttons = {button.name: False for button in self._model.get_buttons()}  # Словарь для хранения отметок
 
     def set_selected(self, name: str, selected: bool):
         """
