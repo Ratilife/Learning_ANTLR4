@@ -39,3 +39,9 @@ class ButtonViewModel(QObject):
 
     def is_valid_button(self, name: str, path: str) -> bool:
         return self._model.is_valid_button(name, path)    
+    
+    def save_buttons(self):
+        """
+        Сохраняет кнопки через Model.
+        """
+        self._model.save_buttons()
