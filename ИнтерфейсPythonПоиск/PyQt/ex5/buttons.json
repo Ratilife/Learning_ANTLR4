@@ -6,5 +6,9 @@
     {
         "name": "1C",
         "path": "\"C:\\Program Files (x86)\\1cv8\\common\\1cestart.exe\""
+    },
+    {
+        "name": "Git Bash",
+        "path": "\"C:\\Program Files\\Git\\git-bash.exe\" --cd-to-home"
     }
 ]

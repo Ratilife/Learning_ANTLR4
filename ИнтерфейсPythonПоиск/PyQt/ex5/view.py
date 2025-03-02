@@ -103,10 +103,10 @@ class MainWindow(QMainWindow):
         self.close()
 
     def update_buttons(self):
-        # Очистка текущих кнопок (кроме кнопки "Добавить" и "Закрыть")
+        # Очистка текущих кнопок (кроме кнопки "Добавить", "Удалить" и "Закрыть")
         for i in reversed(range(self.buttons_layout.count())):
             widget = self.buttons_layout.itemAt(i).widget()
-            if widget != self.add_button and widget != self.close_button:
+            if widget != self.add_button and widget != self.delete_button and widget != self.close_button:
                 widget.setParent(None)
 
         # Добавление новых кнопок между "Добавить" и "Закрыть"
