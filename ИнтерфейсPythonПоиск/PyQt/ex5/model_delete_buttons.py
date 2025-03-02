@@ -4,6 +4,7 @@ from model import ButtonListModel  # Предполагается, что Button
 class DeleteButtonsModel:
     def __init__(self, model: ButtonListModel):
         self._model = model  # Ссылка на ButtonListModel
+        # тут ошибка
         self._selected_buttons = {button.name: False for button in self._model.get_buttons()}  # Словарь для хранения отметок
 
     def set_selected(self, name: str, selected: bool):

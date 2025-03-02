@@ -181,11 +181,8 @@ class MainWindow(QMainWindow):
         Обработчик нажатия на кнопку "Удалить".
         """
         # Создаем модель, ViewModel и диалог
-        buttons_data = [{"name": button.name, "path": button.path} for button in self.view_model.get_buttons()]
-        model = DeleteButtonsModel(buttons_data)
-        view_model = DeleteButtonsViewModel(model)
+        view_model = DeleteButtonsViewModel(self.view_model._model)  # Передаем ButtonListModel
         dialog = DeleteButtonsDialog(view_model, self)
-
         # Показываем диалог
         if dialog.exec() == QDialog.Accepted:
             # Удаляем отмеченные кнопки
