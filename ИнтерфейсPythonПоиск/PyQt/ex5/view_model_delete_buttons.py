@@ -29,3 +29,5 @@ class DeleteButtonsViewModel(QObject):
         Возвращает список имен кнопок, которые были отмечены для удаления.
         """
         return self._delete_model.get_selected_buttons()
+    
+    #описать метод на удаление 
