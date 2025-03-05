@@ -43,19 +43,16 @@ class DeleteButtonsDialog(QDialog):
         # Кнопки "ОК" и "Отмена"
         button_layout = QHBoxLayout()                                       # Создание горизонтального layout для кнопок
         ok_button = QPushButton("OK")                                       # Создание кнопки "ОК"
-        ok_button.clicked.connect(self.accept)                              # Подключение сигнала нажатия к методу принятия
+        ok_button.clicked.connect(self.on_ok_clicked)                       # Подключение сигнала нажатия к методу принятия
         cancel_button = QPushButton("Отмена")                               # Создание кнопки "Отмена"
         cancel_button.clicked.connect(self.reject)                          # Подключение сигнала нажатия к методу отклонения                
         button_layout.addWidget(ok_button)                                  # Добавление кнопки "ОК" в layout
         button_layout.addWidget(cancel_button)                              # Добавление кнопки "Отмена" в layout
         layout.addLayout(button_layout)                                     # Добавление кнопок в основной layout
-
-    # Изменить метод на удаление
-    def get_selected_buttons(self) -> List[str]:
-        """
-        Возвращает список имен кнопок, которые были отмечены для удаления.
-
-        :return: Список имен выбранных кнопок.
-        """
-        return self.view_model.get_selected_buttons()                       # Вызов метода модели представления для получения выбранных кнопок
+    
+    def on_ok_clicked(self):
+       list = self.view_model.get_selected_buttons()                        # Вызов метода модели представления для получения выбранных кнопок
+       self.view_model.remove_button_list(list)                                 # Вызов метода модели представления для удаления выбранных кнопок
+       self.accept()
+                 
     
