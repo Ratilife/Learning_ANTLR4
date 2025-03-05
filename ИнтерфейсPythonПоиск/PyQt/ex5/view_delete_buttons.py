@@ -1,7 +1,7 @@
 # Модуль для диалогового окна удаления кнопок с использованием PySide6
-from typing import List  # Импортируем List для аннотаций типов
+from typing import List                                                                                                   # Импортируем List для аннотаций типов
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QTableWidget, QTableWidgetItem, QPushButton, QHBoxLayout, QCheckBox   # Импортируем необходимые классы для создания GUI
-from PySide6.QtCore import Qt  # Импортируем Qt для использования констант
+from PySide6.QtCore import Qt                                                                                             # Импортируем Qt для использования констант
 
 class DeleteButtonsDialog(QDialog):
     """
@@ -52,7 +52,7 @@ class DeleteButtonsDialog(QDialog):
     
     def on_ok_clicked(self):
        list = self.view_model.get_selected_buttons()                        # Вызов метода модели представления для получения выбранных кнопок
-       self.view_model.remove_button_list(list)                                 # Вызов метода модели представления для удаления выбранных кнопок
+       self.view_model.remove_button_list(list)                             # Вызов метода модели представления для удаления выбранных кнопок
        self.accept()
                  
     
