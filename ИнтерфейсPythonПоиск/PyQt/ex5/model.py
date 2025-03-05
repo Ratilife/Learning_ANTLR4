@@ -43,7 +43,7 @@ class ButtonListModel:
         if 0 <= index < len(self._buttons):
             return self._buttons[index]
         return None
-    def remove_button_list(self):
+    def remove_button_list(self,arr):
         #Удалить кнопки указанные в списке
         pass
 
