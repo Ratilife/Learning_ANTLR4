@@ -45,3 +45,6 @@ class ButtonViewModel(QObject):
         Сохраняет кнопки через Model.
         """
         self._model.save_buttons()
+
+    def remove_button_list(self, list):
+        self._model.remove_button_list(list)
