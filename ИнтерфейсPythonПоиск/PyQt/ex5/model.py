@@ -43,9 +43,11 @@ class ButtonListModel:
         if 0 <= index < len(self._buttons):
             return self._buttons[index]
         return None
-    def remove_button_list(self,list):
-        #Удалить кнопки указанные в списке
-        pass
+    def remove_button_list(self, indices: List[int]):
+        # Сортируем индексы в обратном порядке, чтобы избежать смещения при удалении
+        for index in sorted(indices, reverse=True):
+            self.remove_button(index)
+
 
     def remove_button(self, index: int):
         if 0 <= index < len(self._buttons):
