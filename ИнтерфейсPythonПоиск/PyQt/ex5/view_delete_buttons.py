@@ -36,7 +36,10 @@ class DeleteButtonsDialog(QDialog):
             # Подключение сигнала изменения состояния чекбокса к методу модели представления
             checkbox = QCheckBox()                                          # Создание чекбокса для выбора кнопки для удаления  
             #checkbox.stateChanged.connect(lambda state, name=button["name"]: self.view_model.set_selected(name, state == Qt.Checked))  
-            self._connect_checkbox_signal(checkbox, button["name"])     
+            # Подключение сигнала изменения состояния чекбокса
+            checkbox.stateChanged.connect(
+                lambda state, name=button["name"]: self._on_checkbox_state_changed(state, name)
+            )    
             self.table.setCellWidget(i, 1, checkbox)                        # Установка чекбокса во вторую колонку
 
         layout.addWidget(self.table)
@@ -50,17 +53,16 @@ class DeleteButtonsDialog(QDialog):
         button_layout.addWidget(ok_button)                                  # Добавление кнопки "ОК" в layout
         button_layout.addWidget(cancel_button)                              # Добавление кнопки "Отмена" в layout
         layout.addLayout(button_layout)                                     # Добавление кнопок в основной layout
-    
-    def _connect_checkbox_signal(self, checkbox, name):
+ 
+    def _on_checkbox_state_changed(self, state: int, name: str):
         """
-        Подключает сигнал изменения состояния чекбокса к методу модели представления.
-
-        :param checkbox: Чекбокс, сигнал которого нужно подключить.
+        Обрабатывает изменение состояния чекбокса.
+    
+        :param state: Состояние чекбокса (Qt.Checked или Qt.Unchecked).
         :param name: Имя кнопки, связанной с этим чекбоксом.
         """
-        checkbox.stateChanged.connect(
-            lambda state, name=name: self.view_model.set_selected(name, state == Qt.Checked)
-        )
+        is_selected = state == Qt.Checked  # True, если чекбокс отмечен, иначе False
+        self.view_model.set_selected(name, is_selected)
 
     def get_selected_buttons(self):
         return self.view_model.get_selected_buttons()  # Возвращает список выбранных кнопок
