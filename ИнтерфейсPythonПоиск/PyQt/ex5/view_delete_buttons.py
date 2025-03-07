@@ -61,11 +61,11 @@ class DeleteButtonsDialog(QDialog):
         :param state: Состояние чекбокса (Qt.Checked или Qt.Unchecked).
         :param name: Имя кнопки, связанной с этим чекбоксом.
         """
-        is_selected = state == Qt.Checked  # True, если чекбокс отмечен, иначе False
+        is_selected = state == 2  # True, если чекбокс отмечен, иначе False
         self.view_model.set_selected(name, is_selected)
 
     def get_selected_buttons(self):
-        return self.view_model.get_selected_buttons()  # Возвращает список выбранных кнопок
+        return self.view_model.get_selected_buttons_index()  # Возвращает список выбранных кнопок
     
     def on_ok_clicked(self):
        

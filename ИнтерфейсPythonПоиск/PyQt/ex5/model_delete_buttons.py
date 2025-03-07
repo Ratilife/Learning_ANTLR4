@@ -20,12 +20,23 @@ class DeleteButtonsModel:
         """
         return [name for name, selected in self._selected_buttons.items() if selected]'
     '''
-    def get_selected_buttons(self) -> List[str]:
+    def get_selected_buttons_name(self) -> List[str]:
         """
         Возвращает список имен кнопок, которые были отмечены для удаления.
         """
         selected_names = []
         for name, selected in self._selected_buttons.items():
             if selected:
+                #нужно передавать индекс а не имя
                 selected_names.append(name)
             return selected_names
+        
+    def get_selected_buttons_index(self) -> List[int]:
+        """
+        Возвращает список индексов кнопок, которые были отмечены для удаления.
+        """
+        selected_indices = []
+        for index, (name, selected) in enumerate(self._selected_buttons.items()):
+            if selected:
+                selected_indices.append(index)
+        return selected_indices    
