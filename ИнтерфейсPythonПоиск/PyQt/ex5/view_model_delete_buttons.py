@@ -32,4 +32,4 @@ class DeleteButtonsViewModel(QObject):
     
     #описать метод на удаление 
     def remove_button_list(self,list):
-        return self._delete_model.remove_button_list(list)
+        return self._model.remove_button_list(list)

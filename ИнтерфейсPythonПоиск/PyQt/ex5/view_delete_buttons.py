@@ -50,6 +50,8 @@ class DeleteButtonsDialog(QDialog):
         button_layout.addWidget(cancel_button)                              # Добавление кнопки "Отмена" в layout
         layout.addLayout(button_layout)                                     # Добавление кнопок в основной layout
     
+    def get_selected_buttons(self):
+        return self.view_model.get_selected_buttons()  # Возвращает список выбранных кнопок
     def on_ok_clicked(self):
        list = self.view_model.get_selected_buttons()                        # Вызов метода модели представления для получения выбранных кнопок
        self.view_model.remove_button_list(list)                             # Вызов метода модели представления для удаления выбранных кнопок
