@@ -35,7 +35,8 @@ class DeleteButtonsDialog(QDialog):
             self.table.setItem(i, 0, name_item)                             # Установка элемента в первую колонку
             # Подключение сигнала изменения состояния чекбокса к методу модели представления
             checkbox = QCheckBox()                                          # Создание чекбокса для выбора кнопки для удаления  
-            checkbox.stateChanged.connect(lambda state, name=button["name"]: self.view_model.set_selected(name, state == Qt.Checked))  
+            #checkbox.stateChanged.connect(lambda state, name=button["name"]: self.view_model.set_selected(name, state == Qt.Checked))  
+            self._connect_checkbox_signal(checkbox, button["name"])     
             self.table.setCellWidget(i, 1, checkbox)                        # Установка чекбокса во вторую колонку
 
         layout.addWidget(self.table)
@@ -50,9 +51,22 @@ class DeleteButtonsDialog(QDialog):
         button_layout.addWidget(cancel_button)                              # Добавление кнопки "Отмена" в layout
         layout.addLayout(button_layout)                                     # Добавление кнопок в основной layout
     
+    def _connect_checkbox_signal(self, checkbox, name):
+        """
+        Подключает сигнал изменения состояния чекбокса к методу модели представления.
+
+        :param checkbox: Чекбокс, сигнал которого нужно подключить.
+        :param name: Имя кнопки, связанной с этим чекбоксом.
+        """
+        checkbox.stateChanged.connect(
+            lambda state, name=name: self.view_model.set_selected(name, state == Qt.Checked)
+        )
+
     def get_selected_buttons(self):
         return self.view_model.get_selected_buttons()  # Возвращает список выбранных кнопок
+    
     def on_ok_clicked(self):
+       
        list = self.view_model.get_selected_buttons()                        # Вызов метода модели представления для получения выбранных кнопок
        self.view_model.remove_button_list(list)                             # Вызов метода модели представления для удаления выбранных кнопок
        self.accept()

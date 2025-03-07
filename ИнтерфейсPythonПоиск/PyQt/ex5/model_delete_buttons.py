@@ -13,9 +13,19 @@ class DeleteButtonsModel:
         """
         if name in self._selected_buttons:
             self._selected_buttons[name] = selected
-
+    '''
     def get_selected_buttons(self) -> List[str]:
         """
         Возвращает список имен кнопок, которые были отмечены для удаления.
         """
-        return [name for name, selected in self._selected_buttons.items() if selected]
+        return [name for name, selected in self._selected_buttons.items() if selected]'
+    '''
+    def get_selected_buttons(self) -> List[str]:
+        """
+        Возвращает список имен кнопок, которые были отмечены для удаления.
+        """
+        selected_names = []
+        for name, selected in self._selected_buttons.items():
+            if selected:
+                selected_names.append(name)
+            return selected_names
