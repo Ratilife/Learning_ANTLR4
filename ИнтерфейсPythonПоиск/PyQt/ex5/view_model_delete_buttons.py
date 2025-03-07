@@ -28,10 +28,10 @@ class DeleteButtonsViewModel(QObject):
         """
         Возвращает список имен кнопок, которые были отмечены для удаления.
         """
-        return self._delete_model.get_selected_buttons()
+        return self._delete_model.get_selected_buttons_name()
     
     def get_selected_buttons_index(self) -> List[str]:
-        return self._delete_model.get_selected_buttons()
+        return self._delete_model.get_selected_buttons_index()
 
     #описать метод на удаление 
     def remove_button_list(self,list):
