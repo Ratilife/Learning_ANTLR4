@@ -27,7 +27,6 @@ class DeleteButtonsModel:
         selected_names = []
         for name, selected in self._selected_buttons.items():
             if selected:
-                #нужно передавать индекс а не имя
                 selected_names.append(name)
             return selected_names
         
