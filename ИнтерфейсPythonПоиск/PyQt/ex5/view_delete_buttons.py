@@ -65,12 +65,12 @@ class DeleteButtonsDialog(QDialog):
         self.view_model.set_selected(name, is_selected)
 
     def get_selected_buttons(self):
-        return self.view_model.get_selected_buttons_index()  # Возвращает список выбранных кнопок
+        return self.view_model.get_selected_buttons()  # Возвращает список выбранных кнопок
     
     def on_ok_clicked(self):
        
-       list = self.view_model.get_selected_buttons_index()                        # Вызов метода модели представления для получения выбранных кнопок
-       self.view_model.remove_button_list(list)                             # Вызов метода модели представления для удаления выбранных кнопок
+       #list = self.view_model.get_selected_buttons_index()                        # Вызов метода модели представления для получения выбранных кнопок
+       #self.view_model.remove_button_list(list)                             # Вызов метода модели представления для удаления выбранных кнопок
        self.accept()
                  
     
