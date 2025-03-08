@@ -28,7 +28,7 @@ class DeleteButtonsModel:
         for name, selected in self._selected_buttons.items():
             if selected:
                 selected_names.append(name)
-            return selected_names
+        return selected_names
         
     def get_selected_buttons_index(self) -> List[int]:
         #возможно удалить
