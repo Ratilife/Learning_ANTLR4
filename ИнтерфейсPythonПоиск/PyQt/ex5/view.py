@@ -187,7 +187,13 @@ class MainWindow(QMainWindow):
         if dialog.exec() == QDialog.Accepted:
             # Удаляем отмеченные кнопки
             for name in dialog.get_selected_buttons():
-                index = next(i for i, button in enumerate(self.view_model.get_buttons()) if button.name == name)
+                '''index = next(
+                    i for i, button in enumerate(self.view_model.get_buttons()) 
+                    if button.name == name)'''
+                for i, button in enumerate(self.view_model.get_buttons()):
+                    if button.name == name:
+                        index = i
+                        break
                 self.view_model.remove_button(index)    
 
 # Иконка в формате base64

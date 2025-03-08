@@ -24,13 +24,14 @@ class DeleteButtonsViewModel(QObject):
         self._delete_model.set_selected(name, selected)
         self.buttonsUpdated.emit()
 
-    def get_selected_buttons_name(self) -> List[str]:
+    def get_selected_buttons(self) -> List[str]:
         """
         Возвращает список имен кнопок, которые были отмечены для удаления.
         """
-        return self._delete_model.get_selected_buttons_name()
+        return self._delete_model.get_selected_buttons()
     
     def get_selected_buttons_index(self) -> List[str]:
+        # возможно удалить
         return self._delete_model.get_selected_buttons_index()
 
     #описать метод на удаление 
