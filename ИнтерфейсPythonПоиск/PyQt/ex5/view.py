@@ -11,6 +11,10 @@ import sys
 
 class MainWindow(QMainWindow):
     def __init__(self, view_model):
+        """
+        Инициализация главного окна приложения.
+        :param view_model: ViewModel, которая управляет логикой отображения и взаимодействия с кнопками.
+        """
         super().__init__()
         self.view_model = view_model
         #self.setWindowTitle("Панель кнопок")
@@ -92,17 +96,24 @@ class MainWindow(QMainWindow):
         self.set_initial_position()
 
     def add_button_clicked(self):
-        # Диалог для добавления новой кнопки
+        """
+        Обработчик нажатия на кнопку "Добавить". Открывает диалог для добавления новой кнопки.
+        """
         name, ok1 = QInputDialog.getText(self, "Добавить кнопку", "Введите название:")
         path, ok2 = QInputDialog.getText(self, "Добавить кнопку", "Введите путь к программе:")
         if ok1 and ok2:
             self.view_model.add_button(name, path)
 
     def close_panel(self):
-        # Закрытие приложения
+        """
+        Обработчик нажатия на кнопку "Закрыть". Закрывает приложение.
+        """
         self.close()
 
     def update_buttons(self):
+        """
+        Обновляет отображение кнопок на панели в соответствии с текущим состоянием ViewModel.
+        """
         # Очистка текущих кнопок (кроме кнопки "Добавить", "Удалить" и "Закрыть")
         for i in reversed(range(self.buttons_layout.count())):
             widget = self.buttons_layout.itemAt(i).widget()
@@ -120,9 +131,15 @@ class MainWindow(QMainWindow):
             text_width = font_metrics.horizontalAdvance(button.name) + 10  # вычисляет ширину текста кнопки + Добавляем небольшой отступ
             btn.setFixedWidth(text_width) #устанавливает ширину кнопки на основе ширины текста, добавляя небольшой отступ для удобства.
 
-            self.buttons_layout.insertWidget(i + 1, btn)  # Вставляем кнопки после "Добавить"
+            self.buttons_layout.insertWidget(i + 2, btn)  # Вставляем кнопки после "Удалить"
 
     def load_icon_from_base64(self, base64_data: str) -> QIcon:
+        """
+        Загружает иконку из строки в формате base64.
+
+        :param base64_data: Строка с данными иконки в формате base64.
+        :return: Объект QIcon, если загрузка прошла успешно, иначе пустая иконка.
+        """
         # Декодирование base64 и создание QIcon
         if not base64_data:
             return QIcon()  # Возвращаем пустую иконку, если строка пустая
@@ -143,21 +160,33 @@ class MainWindow(QMainWindow):
 
     # Обработка событий мыши для перемещения окна
     def mousePressEvent(self, event):
+        """
+        Обработчик события нажатия кнопки мыши. Начинает перемещение окна, если нажата левая кнопка мыши.
+        """
         if event.button() == Qt.LeftButton:
             self.dragging = True
             self.offset = event.globalPosition().toPoint() - self.pos()
             event.accept()
 
     def mouseMoveEvent(self, event):
+        """
+        Обработчик события перемещения мыши. Перемещает окно, если происходит перетаскивание.
+        """
         if self.dragging:
             self.move(event.globalPosition().toPoint() - self.offset)
             event.accept()
 
     def mouseReleaseEvent(self, event):
+        """
+        Обработчик события отпускания кнопки мыши. Завершает перемещение окна.
+        """
         if event.button() == Qt.LeftButton:
             self.dragging = False
             event.accept()
     def set_initial_position(self):
+        """
+        Устанавливает начальную позицию окна вверху экрана по центру.
+        """
         # Получаем размеры экрана
         screen = QApplication.primaryScreen()
         screen_geometry = screen.availableGeometry()
