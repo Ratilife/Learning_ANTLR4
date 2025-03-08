@@ -1,0 +1,25 @@
+Использование расширения "Pyreverse"
+Pyreverse — это инструмент, входящий в состав pylint, который может генерировать UML-диаграммы из Python-кода.
+
+Установка:
+
+Установите pylint:
+
+bash
+Copy
+pip install pylint
+Установите Graphviz (если ещё не установлен).
+
+Использование:
+
+Откройте терминал в VSCode.
+
+Выполните команду:
+
+bash
+Copy
+pyreverse -o png -p my_project your_module.py
+Где your_module.py — это ваш Python-файл.
+
+Pyreverse создаст два файла: classes_my_project.png и packages_my_project.png, содержащих диаграммы классов и пакетов.
+
