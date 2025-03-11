@@ -7,7 +7,7 @@ folderEntry: '{' STRING ',' '1' ',' '0' ',' STRING ',' STRING '}';
 templateEntry: '{' STRING ',' '0' ',' '0' ',' STRING ',' STRING '}';
 
 INT: [0-9]+;
-STRING: '"' ( '\\' [btnfr"\\] . | ~["\\\r\n] )* '"';  // Разрешены любые символы, включая кириллицу и []
+STRING: '"' ( '\\' [btnfr"\\] | ~["\\\r\n] | '\r'? '\n' | '\t' )* '"';
 WORD: [\u0400-\u04FFa-zA-Z0-9_]+;
 
 
