@@ -1,26 +1,16 @@
 import networkx as nx
 import matplotlib.pyplot as plt
-from antlr4 import FileStream, CommonTokenStream, ParseTreeWalker, DiagnosticErrorListener
+from antlr4 import FileStream, CommonTokenStream, ParseTreeWalker
 from ANTLR4.STFileLexer import STFileLexer
 from ANTLR4.STFileParser import STFileParser
 from antlr4.tree.Tree import TerminalNodeImpl, ParseTreeListener
 
-# Функция для обработки кодировки "utf-8 BOM"
-def read_file_with_bom(file_path):
-    with open(file_path, "rb") as file:
-        raw_data = file.read()
-        if raw_data.startswith(b"\xef\xbb\xbf"):  # Проверяем наличие BOM
-            return raw_data.decode("utf-8-sig")  # Используем utf-8-sig для удаления BOM
-        return raw_data.decode("utf-8")  # Иначе используем обычный utf-8
-
-# Разбор файла с учетом кодировки "utf-8 BOM"
-file_content = read_file_with_bom("МоиШаблоны.st")
+# Разбор файла
 input_stream = FileStream("МоиШаблоны.st", encoding="utf-8")
 lexer = STFileLexer(input_stream)
 token_stream = CommonTokenStream(lexer)
 parser = STFileParser(token_stream)
-parser.addErrorListener(DiagnosticErrorListener())  # Включаем диагностику
-tree = parser.fileStructure()  # Начинаем разбор с корневого правила
+tree = parser.fileStructure()
 
 # Граф для визуализации
 G = nx.DiGraph()

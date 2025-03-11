@@ -1,19 +1,19 @@
 grammar STFile;
 
-BOM: '\uFEFF' -> skip;
 fileStructure: '{' INT ',' (entryStructure (',' entryStructure)*)? '}';
 entryStructure: '{' INT ',' (folderEntry | templateEntry) (',' entryStructure)* '}';
 folderEntry: '{' STRING ',' '1' ',' '0' ',' STRING ',' STRING '}';
 templateEntry: '{' STRING ',' '0' ',' '0' ',' STRING ',' STRING '}';
 
 INT: [0-9]+;
-STRING: '"' ( '\\' [btnfr"\\] . | ~["\\\r\n] )* '"';  // Разрешены любые символы, включая кириллицу и []
+STRING: '"' ( '\\' . | ~["\\\r\n] )* '"';  // Разрешены любые символы, включая кириллицу и []
 WORD: [\u0400-\u04FFa-zA-Z0-9_]+;
 
 // Символы [] теперь могут быть внутри строк, но определены как токены на случай использования вне строк
 LBRACK: '[';
 RBRACK: ']';
-SYMBOL: [()|=<>*+-[],;&.:/\\];
+SYMBOL: [()|=<>*+-,;&.:/\\];
 
-// Пропускаем пробелы, табуляции и переводы строк
-WS: [ \t\r\n\u00A0\u00AD\v\f]+ -> skip;
+WS: [ \t\r\n]+ -> skip;
+COMMENT: '//' ~[\r\n]* -> skip;
+MULTILINE_COMMENT: '/*' .*? '*/' -> skip;
