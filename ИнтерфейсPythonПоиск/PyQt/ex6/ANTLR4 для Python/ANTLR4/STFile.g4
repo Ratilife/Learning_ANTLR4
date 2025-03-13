@@ -6,12 +6,13 @@ entryStructure: '{' INT ',' (folderEntry | templateEntry) (',' entryStructure)* 
 folderEntry: '{' STRING ',' '1' ',' '0' ',' STRING ',' STRING '}';
 templateEntry: '{' STRING ',' '0' ',' '0' ',' STRING ',' STRING '}';
 
-INT: [0-9]+;
-STRING: '"' ( '\\' [btnfr"\\] | ~["\\\r\n] | '\r'? '\n' | '\t' )* '"';
+DIGIT: [0-9];
+INT: DIGIT+;  // Правильно: теперь `INT` не конфликтует
+
+STRING: '"' ( '\\' [btnfr"\\] | ~["\\]  )* '"';
+SYMBOL: [\[\]()|=<>*+-,;&.:/\\%!`?'@#]+;  
+
 WORD: [\u0400-\u04FFa-zA-Z0-9_]+;
 
-
-SYMBOL: [()|=<>*+-[],;&.:/\\];
-
 // Пропускаем пробелы, табуляции и переводы строк
-WS: [ \t\r\n\u00A0\u00AD\v\f]+ -> skip;
+WS: [ \t\r\n\u00A0\u00AD\u000B\f\u2002\u2003\u2009\u202F]+ -> skip;
