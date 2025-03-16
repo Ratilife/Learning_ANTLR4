@@ -13,14 +13,36 @@ def read_file_with_bom(file_path):
             return raw_data.decode("utf-8-sig")  # Используем utf-8-sig для удаления BOM
         return raw_data.decode("utf-8")  # Иначе используем обычный utf-8
 
+def check_braces_balance(file_content):
+    stack = []
+    for i, char in enumerate(file_content):
+        if char == '{':
+            stack.append(i)  # Сохраняем индекс открывающей скобки
+        elif char == '}':
+            if not stack:
+                raise ValueError(f"Лишняя закрывающая скобка в позиции {i}")
+            stack.pop()  # Удаляем последнюю открывающую скобку из стека
+
+    if stack:
+        raise ValueError(f"Не хватает {len(stack)} закрывающих скобок. Открывающие скобки в позициях: {stack}")
+    else:
+        print("Скобки сбалансированы.")
+
 # Разбор файла с учетом кодировки "utf-8 BOM"
 file_content = read_file_with_bom("МоиШаблоны.st")
-input_stream = FileStream("МоиШаблоны.st", encoding="utf-8")
-lexer = STFileLexer(input_stream)
-token_stream = CommonTokenStream(lexer)
-parser = STFileParser(token_stream)
-parser.addErrorListener(DiagnosticErrorListener())  # Включаем диагностику
-tree = parser.fileStructure()  # Начинаем разбор с корневого правила
+# Проверка баланса скобок
+try:
+    check_braces_balance(file_content)
+except ValueError as e:
+    print(f"Ошибка в структуре файла: {e}")
+    # Здесь можно добавить логику для исправления файла или завершения программы
+else:
+    input_stream = FileStream("МоиШаблоны.st", encoding="utf-8")
+    lexer = STFileLexer(input_stream)
+    token_stream = CommonTokenStream(lexer)
+    parser = STFileParser(token_stream)
+    parser.addErrorListener(DiagnosticErrorListener())  # Включаем диагностику
+    tree = parser.fileStructure()  # Начинаем разбор с корневого правила
 
 # Граф для визуализации
 G = nx.DiGraph()
