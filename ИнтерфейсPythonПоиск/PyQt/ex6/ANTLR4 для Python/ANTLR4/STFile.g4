@@ -1,19 +1,33 @@
 grammar STFile;
 
+// Пропуск BOM (Byte Order Mark)
 BOM: '\uFEFF' -> skip;
-fileStructure: LBRACE INT ',' (entryStructure (',' entryStructure)*)? RBRACE;
-entryStructure: LBRACE INT ',' (folderEntry | templateEntry) (',' entryStructure)* RBRACE;
+
+// Корневая структура файла
+fileStructure: LBRACE INT ',' entryStructure (',' entryStructure)* RBRACE (RBRACE | WS);
+
+// Структура элемента (может быть вложенной)
+
+//entryStructure: LBRACE INT ',' (folderEntry | templateEntry | entryStructure) (',' entryStructure)* RBRACE;
+entryStructure: LBRACE INT ',' (folderEntry | templateEntry | nestedEntry) RBRACE;
+
+// Вложенные структуры
+nestedEntry: LBRACE INT ',' entryStructure* RBRACE;
+
+// Структура папки
 folderEntry: LBRACE STRING ',' '1' ',' '0' ',' STRING (',' STRING)? RBRACE;
+
+// Структура шаблона
 templateEntry: LBRACE STRING ',' '0' ',' '0' ',' STRING (',' STRING)? RBRACE;
 
+// Лексемы
 DIGIT: [0-9];
 INT: DIGIT+;  // Правильно: теперь `INT` не конфликтует
 
 LBRACE: '{';  // Открывающая фигурная скобка
 RBRACE: '}';  // Закрывающая фигурная скобка
 
-//STRING: '"' ( '\\' [btnfr"\\] | '\\' . | ~["\\] )* '"';
-//STRING: '"' ( '""' | '\\' [btnfr"\\] | ~["\\] )* '"';  // ← Обновленное правило
+// Строка (поддерживает экранированные символы и юникод)
 STRING: '"' ( '""' | '\\' . | ~["\\] )* '"';
 
 

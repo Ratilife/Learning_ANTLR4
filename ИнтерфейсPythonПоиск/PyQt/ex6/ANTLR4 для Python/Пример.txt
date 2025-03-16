@@ -17,3 +17,12 @@ SYMBOL: [()|=<>*+-,;&.:/\\];
 WS: [ \t\r\n]+ -> skip;
 COMMENT: '//' ~[\r\n]* -> skip;
 MULTILINE_COMMENT: '/*' .*? '*/' -> skip;
+
+
+
+*****************************
+entryStructure: LBRACE INT ',' (folderEntry | templateEntry) (',' entryStructure)* RBRACE;
+entryStructure: LBRACE INT ',' (folderEntry | templateEntry | entryStructure)? (',' entryStructure)* RBRACE;
+STRING: '"' ( '\\' [btnfr"\\] | '\\' . | ~["\\] )* '"';
+STRING: '"' ( '""' | '\\' [btnfr"\\] | ~["\\] )* '"';  // ← Обновленное правило
+
