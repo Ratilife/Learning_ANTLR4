@@ -1,48 +1,44 @@
 grammar STFile;
 
-// Пропуск BOM (Byte Order Mark)
 BOM: '\uFEFF' -> skip;
 
-// Корневая структура файла
-fileStructure: LBRACE INT ',' entryStructure (',' entryStructure)* RBRACE (RBRACE | WS);
+fileStructure: LBRACE '1' ',' entries RBRACE;
 
-// Структура элемента (может быть вложенной)
+entries: entry (',' entry)*;
 
-//entryStructure: LBRACE INT ',' (folderEntry | templateEntry | entryStructure) (',' entryStructure)* RBRACE;
-entryStructure: LBRACE INT ',' (folderEntry | templateEntry | nestedEntry) RBRACE;
+entry:
+    // Папка: {кол-во_вложений, {"Название", 1, ...}, вложенные_элементы}
+    LBRACE count=INT ',' folderHeader ',' nested_entries RBRACE
+    |
+    // Шаблон: {0, {"Название", 0, ...}}
+    LBRACE '0' ',' templateHeader RBRACE
+;
 
-// Вложенные структуры
-nestedEntry: LBRACE INT ',' entryStructure* RBRACE;
+nested_entries: entry (',' entry)*;
 
-// Структура папки
-folderEntry: LBRACE STRING ',' '1' ',' '0' ',' STRING (',' STRING)? RBRACE;
+folderHeader:
+    LBRACE
+    name=STRING ',' 
+    '1' ','  // Тип "Папка" (второй параметр = 1)
+    flags=INT ',' 
+    param1=STRING ',' 
+    param2=STRING
+    RBRACE
+;
 
-// Структура шаблона
-templateEntry: LBRACE STRING ',' '0' ',' '0' ',' STRING (',' STRING)? RBRACE;
+templateHeader:
+    LBRACE
+    name=STRING ',' 
+    '0' ','  // Тип "Шаблон" (второй параметр = 0)
+    flags=INT ',' 
+    param1=STRING ',' 
+    codeBlock=STRING
+    RBRACE
+;
 
 // Лексемы
-DIGIT: [0-9];
-INT: DIGIT+;  // Правильно: теперь `INT` не конфликтует
-
-LBRACE: '{';  // Открывающая фигурная скобка
-RBRACE: '}';  // Закрывающая фигурная скобка
-
-// Строка (поддерживает экранированные символы и юникод)
-STRING: '"' ( '""' | '\\' . | ~["\\] )* '"';
-
-
-SYMBOL: [()[\]|=<>*+-,;&.:/\\%!`?'@#]+;
-
-//WORD: [\u0400-\u04FFa-zA-Z0-9_]+;
-
-// Слова из всех языков мира + цифры
-WORD: [\p{L}\p{N}_\u2013\u2014\u2026\u2022\u201C\u201D\u00AB\u00BB]+;
-
-// Эмодзи
-EMOJI: [\p{So}\p{Sk}]+;
-
-// Математические символы
-MATH_SYMBOL: [\p{Sm}]+;
-
-// Пропускаем пробелы, табуляции и переводы строк
-WS: [ \t\r\n\u00A0\u00AD\u000B\f\u2002\u2003\u2009\u202F]+ -> skip;
+INT: [0-9]+;
+STRING: '"' ( '\\' . | ~["\\] )* '"';
+LBRACE: '{';
+RBRACE: '}';
+WS: [ \t\r\n]+ -> skip;

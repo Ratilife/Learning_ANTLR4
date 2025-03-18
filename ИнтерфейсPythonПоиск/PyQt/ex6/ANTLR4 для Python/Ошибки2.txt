@@ -12,3 +12,12 @@ line 7341:5 token recognition error at: ''
 line 7446:84 token recognition error at: '—'
 line 7808:112 token recognition error at: '☻'
 line 8653:10 token recognition error at: '"}\r\n}\r\n}\r\n}\r\n}'
+
+
+************************
+line 3:12 mismatched input '0' expecting INT
+line 3:14 mismatched input '"Это что"' expecting '{'
+line 3:24 mismatched input '"Что то"' expecting '{'
+line 5:11 mismatched input '0' expecting INT
+line 5:13 mismatched input '"бум"' expecting '{'
+line 5:19 mismatched input '"\t\tСообщение = Новый СообщениеПользователю;\r\n\t\tСообщение.Текст = "' expecting '{'

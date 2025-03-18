@@ -29,7 +29,7 @@ def check_braces_balance(file_content):
         print("Скобки сбалансированы.")
 
 # Разбор файла с учетом кодировки "utf-8 BOM"
-file_content = read_file_with_bom("МоиШаблоны.st")
+file_content = read_file_with_bom("Новый1.st")
 # Проверка баланса скобок
 try:
     check_braces_balance(file_content)
@@ -37,7 +37,7 @@ except ValueError as e:
     print(f"Ошибка в структуре файла: {e}")
     # Здесь можно добавить логику для исправления файла или завершения программы
 else:
-    input_stream = FileStream("МоиШаблоны.st", encoding="utf-8")
+    input_stream = FileStream("Новый1.st", encoding="utf-8")
     lexer = STFileLexer(input_stream)
     token_stream = CommonTokenStream(lexer)
     parser = STFileParser(token_stream)
