@@ -2,7 +2,7 @@ grammar STFile;
 
 BOM: '\uFEFF' -> skip;
 
-fileStructure: LBRACE '1' ',' entries RBRACE;
+fileStructure: LBRACE INT ',' entries RBRACE;
 
 entries: entry (',' entry)*;
 
@@ -38,7 +38,7 @@ templateHeader:
 
 // Лексемы
 INT: [0-9]+;
-STRING: '"' ( '\\' . | ~["\\] )* '"';
+STRING: '"' ( '\\' [\\"] | ~["\\\r\n] )* '"'; // Разрешены экранированные кавычки и обратные слэши
 LBRACE: '{';
 RBRACE: '}';
 WS: [ \t\r\n]+ -> skip;
