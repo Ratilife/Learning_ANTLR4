@@ -1,0 +1,32 @@
+grammar OneC;
+
+prog: method*;
+
+method: procedure | function;
+
+procedure: PROCEDURE ID LPAREN RPAREN statement* ENDPROCEDURE;
+
+function: FUNCTION ID LPAREN RPAREN statement* RETURN expr SEMICOLON ENDFUNCTION;
+
+statement: assignment SEMICOLON
+         | methodCall SEMICOLON;
+
+assignment: ID '=' expr;
+
+methodCall: ID LPAREN RPAREN;
+
+expr: ID;
+
+variable: ID;
+
+// Лексемы
+PROCEDURE: 'Процедура';
+FUNCTION: 'Функция';
+ENDPROCEDURE: 'КонецПроцедуры';
+ENDFUNCTION: 'КонецФункции';
+RETURN: 'Возврат';
+ID: [а-яА-Я_][а-яА-Я0-9_]*;
+LPAREN: '(';
+RPAREN: ')';
+SEMICOLON: ';';
+WS: [ \t\r\n]+ -> skip;

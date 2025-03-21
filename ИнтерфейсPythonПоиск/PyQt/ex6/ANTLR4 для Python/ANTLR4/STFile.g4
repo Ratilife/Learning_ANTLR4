@@ -5,16 +5,19 @@ BOM: '\uFEFF' -> skip;
 // Корневая структура файла: всегда начинается с {1, ...}
 fileStructure: LBRACE '1' ',' rootContent RBRACE;
 
-// Содержимое корневой структуры: вложенная структура с количеством элементов
-rootContent: LBRACE count=INT ',' nestedEntries RBRACE;
+// Содержимое корневой структуры: папка с количеством элементов
+rootContent: LBRACE count=INT ',' folderContent RBRACE;
+
+// Содержимое папки: заголовок папки и вложенные элементы
+folderContent: folderHeader ',' nestedEntries;
 
 // Вложенные элементы: папки или шаблоны
 nestedEntries: entry (',' entry)*;
 
 // Запись: папка или шаблон
 entry:
-    // Папка: {1, {"Название", 1, 0, "", ""}, вложенные_элементы}
-    LBRACE '1' ',' folderHeader ',' nestedEntries RBRACE
+    // Папка: {count, {"Название", 1, 0, "", ""}, вложенные_элементы}
+    LBRACE count=INT ',' folderHeader ',' nestedEntries RBRACE
     |
     // Шаблон: {0, {"Название", 0, 0, "@ТекстДляАвтоЗаполнения", "текст шаблона"}}
     LBRACE '0' ',' templateHeader RBRACE
@@ -36,15 +39,15 @@ templateHeader:
     LBRACE
     name=STRING ',' 
     '0' ','  // Тип "Шаблон" (второй параметр = 0)
-    '0' ','  // Константа (третий параметр = 0)
-    autoFillText=STRING ','  // Текст для автоматического заполнения (четвёртый параметр)
-    templateText=STRING      // Текст шаблона (пятый параметр)
+    flags=INT ','  // Флаги (третий параметр, может быть 0 или 1)
+    param1=STRING ','  // Параметр 1 (четвёртый параметр)
+    codeBlock=STRING   // Код шаблона (пятый параметр)
     RBRACE
 ;
 
 // Лексемы
 INT: [0-9]+;
-STRING: '"' ( '\\' [\\"] | ~["\\\r\n] )* '"'; // Разрешены экранированные кавычки и обратные слэши
+STRING: '"' ( '""' | '\\' .  | ~["\\\r\n] )* '"'; // Разрешены экранированные кавычки и обратные слэши
 LBRACE: '{';
 RBRACE: '}';
 WS: [ \t\r\n]+ -> skip;
