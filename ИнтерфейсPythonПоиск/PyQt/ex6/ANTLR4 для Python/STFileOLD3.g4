@@ -6,7 +6,7 @@ BOM: '\uFEFF' -> skip;
 fileStructure: LBRACE '1' ',' rootContent RBRACE;
 
 // Содержимое корневой структуры: папка с количеством элементов
-rootContent: LBRACE count=forceInt ',' folderContent RBRACE;
+rootContent: LBRACE count=forceInt ',' folderContent RBRACE;        // Используем forceInt вместо INT
 
 // Содержимое папки: заголовок папки и вложенные элементы
 folderContent: folderHeader ',' nestedEntries;
@@ -16,21 +16,32 @@ nestedEntries: entry (',' entry)*;
 
 // Запись: папка или шаблон
 entry:
-    LBRACE count=forceInt ',' header=headerContent ',' nestedEntries RBRACE
-    {self.isFolder($header)}?  // Проверка, что это папка
+    // Папка: {count, {"Название", 1, 0, "", ""}, вложенные_элементы}
+    LBRACE count=forceInt ',' folderHeader ',' nestedEntries RBRACE    //Используем forceInt вместо INT
     |
-    LBRACE '0' ',' header=headerContent RBRACE
-    {self.isTemplate($header)}?  // Проверка, что это шаблон
+    // Шаблон: {0, {"Название", 0, 0, "@ТекстДляАвтоЗаполнения", "текст шаблона"}}
+    LBRACE '0' ',' templateHeader RBRACE
 ;
 
-// Заголовок папки или шаблона
-headerContent:
+// Заголовок папки: {"Название", 1, 0, "", ""}
+folderHeader:
     LBRACE
     name=STRING ',' 
-    type=INT ','  // Тип (1 для папки, 0 для шаблона)
-    flags=INT ','  // Флаги (0 или 1)
-    param1=STRING ','  // Параметр 1
-    param2=STRING      // Параметр 2
+    '1' ','  // Тип "Папка" (второй параметр = 1)
+    '0' ','  // Константа (третий параметр = 0)
+    empty1=STRING ','  // Пустая строка (четвёртый параметр)
+    empty2=STRING      // Пустая строка (пятый параметр)
+    RBRACE
+;
+
+// Заголовок шаблона: {"Название", 0, 0, "@ТекстДляАвтоЗаполнения", "текст шаблона"}
+templateHeader:
+    LBRACE
+    name=STRING ',' 
+    '0' ','  // Тип "Шаблон" (второй параметр = 0)
+    flags=INT ','  // Флаги (третий параметр, может быть 0 или 1)
+    param1=STRING ','  // Параметр 1 (четвёртый параметр)
+    codeBlock=STRING   // Код шаблона (пятый параметр)
     RBRACE
 ;
 
@@ -56,12 +67,4 @@ forceInt: {self.isInteger(_input.LT(1).text)}? INT;
             return True
         except ValueError:
             return False
-
-    def isFolder(self, header):
-        # Проверка, что тип папки равен 1, а константа равна 0
-        return header.type.text == '1' and header.flags.text == '0'
-
-    def isTemplate(self, header):
-        # Проверка, что тип шаблона равен 0, а флаги равны 0 или 1
-        return header.type.text == '0' and header.flags.text in {'0', '1'}
 }
