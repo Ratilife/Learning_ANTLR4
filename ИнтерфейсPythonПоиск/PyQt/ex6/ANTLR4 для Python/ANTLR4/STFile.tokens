@@ -1,0 +1,17 @@
+T__0=1
+T__1=2
+T__2=3
+BOM=4
+WORD=5
+INT=6
+STRING=7
+SYMBOL=8
+LBRACE=9
+RBRACE=10
+WS=11
+'1'=1
+','=2
+'0'=3
+'\uFEFF'=4
+'{'=9
+'}'=10
