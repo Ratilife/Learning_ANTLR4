@@ -6,7 +6,7 @@ BOM: '\uFEFF' -> skip;
 fileStructure: LBRACE '1' ',' rootContent RBRACE;
 
 // Содержимое корневой структуры: папка с количеством элементов
-rootContent: LBRACE count=forceInt ',' folderContent RBRACE;
+rootContent: LBRACE count=forceInt ',' folderContent RBRACE;  // Используем forceInt вместо INT
 
 // Содержимое папки: заголовок папки и вложенные элементы
 folderContent: folderHeader ',' nestedEntries;
@@ -31,6 +31,17 @@ headerContent:
     flags=INT ','  // Флаги (0 или 1)
     param1=STRING ','  // Параметр 1
     param2=STRING      // Параметр 2
+    RBRACE
+;
+
+// Заголовок папки: {"Название", 1, 0, "", ""}
+folderHeader:
+    LBRACE
+    name=STRING ',' 
+    '1' ','  // Тип "Папка" (второй параметр = 1)
+    '0' ','  // Константа (третий параметр = 0)
+    empty1=STRING ','  // Пустая строка (четвёртый параметр)
+    empty2=STRING      // Пустая строка (пятый параметр)
     RBRACE
 ;
 
