@@ -17,26 +17,21 @@ nestedEntries: entry (',' entry)*;
 // Запись: папка или шаблон
 entry:
     LBRACE count=forceInt ',' header=headerContent ',' nestedEntries RBRACE
-    {STFileParserExtensions.isFolder($header.type, $header.flags)}?  // Проверка, что это папка
+    {self.isFolder($header)}?  // Проверка, что это папка
     |
     LBRACE '0' ',' header=headerContent RBRACE
-    {STFileParserExtensions.isTemplate($header.type, $header.flags)}?  // Проверка, что это шаблон
+    {self.isTemplate($header)}?  // Проверка, что это шаблон
 ;
 
 // Заголовок папки или шаблона
-headerContent returns [String type, String flags]:
+headerContent:
     LBRACE
     name=STRING ',' 
-    t_type=INT ','  // Тип (1 для папки, 0 для шаблона)
-    f_flags=INT ','  // Флаги (0 или 1)
+    type=INT ','  // Тип (1 для папки, 0 для шаблона)
+    flags=INT ','  // Флаги (0 или 1)
     param1=STRING ','  // Параметр 1
     param2=STRING      // Параметр 2
     RBRACE
-    {
-        // Присваиваем возвращаемые значения
-        $type = $t_type.text;
-        $flags = $f_flags.text;
-    }
 ;
 
 // Заголовок папки: {"Название", 1, 0, "", ""}
@@ -63,4 +58,21 @@ RBRACE: '}';
 WS: [ \t\r\n\u00A0\u00AD\u000B\f\u2002\u2003\u2009\u202F]+ -> skip;
 
 // Семантический предикат для принудительного распознавания INT
-forceInt: {STFileParserExtensions.isInteger(_input.LT(1).text)}? INT;
+forceInt: {self.isInteger(_input.LT(1).text)}? INT;
+
+@parser::members {
+    def isInteger(self, text):
+        try:
+            int(text)
+            return True
+        except ValueError:
+            return False
+
+    def isFolder(self, header):
+        # Проверка, что тип папки равен 1, а константа равна 0
+        return header.type.text == '1' and header.flags.text == '0'
+
+    def isTemplate(self, header):
+        # Проверка, что тип шаблона равен 0, а флаги равны 0 или 1
+        return header.type.text == '0' and header.flags.text in {'0', '1'}
+}
