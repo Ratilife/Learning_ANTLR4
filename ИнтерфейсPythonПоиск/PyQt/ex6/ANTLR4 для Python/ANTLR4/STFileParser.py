@@ -4,10 +4,10 @@ from antlr4 import *
 from io import StringIO
 from STFileParserExtensions import STFileParserExtensions
 import sys
-if sys.version_info[1] > 5:
-	from typing import TextIO
-else:
-	from typing.io import TextIO
+#if sys.version_info[1] > 5:
+from typing import TextIO
+#else:
+#	from typing.io import TextIO
 
 def serializedATN():
     return [
@@ -604,7 +604,7 @@ class STFileParser ( Parser ):
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 83
-            if not STFileParserExtensions.isInteger(_input.LT(1).text):
+            if not STFileParserExtensions.isInteger(self._input.LT(1).text):
                 from antlr4.error.Errors import FailedPredicateException
                 raise FailedPredicateException(self, "STFileParserExtensions.isInteger(_input.LT(1).text)")
             self.state = 84
@@ -641,7 +641,7 @@ class STFileParser ( Parser ):
 
     def forceInt_sempred(self, localctx:ForceIntContext, predIndex:int):
             if predIndex == 2:
-                return STFileParserExtensions.isInteger(_input.LT(1).text)
+                return STFileParserExtensions.isInteger(self._input.LT(1).text)
          
 
 
