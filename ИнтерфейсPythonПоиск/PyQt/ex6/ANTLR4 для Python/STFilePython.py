@@ -39,6 +39,7 @@ except ValueError as e:
 else:
     input_stream = FileStream("Новый1.st", encoding="utf-8")
     lexer = STFileLexer(input_stream)
+
     token_stream = CommonTokenStream(lexer)
     parser = STFileParser(token_stream)
     parser.addErrorListener(DiagnosticErrorListener())  # Включаем диагностику

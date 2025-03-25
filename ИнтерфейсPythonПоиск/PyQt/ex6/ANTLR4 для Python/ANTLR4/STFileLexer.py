@@ -195,7 +195,7 @@ class STFileLexer(Lexer):
             "'1'", "','", "'0'", "'\\uFEFF'", "'{'", "'}'" ]
 
     symbolicNames = [ "<INVALID>",
-            "BOM", "WORD", "INT", "STRING", "SYMBOL", "LBRACE", "RBRACE", 
+            "BOM", "INT", "WORD",  "STRING", "SYMBOL", "LBRACE", "RBRACE", 
             "WS" ]
 
     ruleNames = [ "T__0", "T__1", "T__2", "BOM", "WORD", "INT", "STRING", 

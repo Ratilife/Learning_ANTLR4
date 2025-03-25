@@ -27,10 +27,10 @@ entry:
 headerContent returns [String type, String flags]:
     LBRACE
     name=STRING ',' 
-    t_type=INT ','  // Тип (1 для папки, 0 для шаблона)
-    f_flags=INT ','  // Флаги (0 или 1)
-    param1=STRING ','  // Параметр 1
-    param2=STRING      // Параметр 2
+    t_type=INT ','      // Тип (1 для папки, 0 для шаблона)
+    f_flags=INT ','     // Флаги (0 или 1)
+    param1=STRING ','   // Параметр 1
+    param2=STRING       // Параметр 2
     RBRACE
     {
         // Присваиваем возвращаемые значения
@@ -51,10 +51,10 @@ folderHeader:
 ;
 
 // Лексемы
-
+INT: [0-9]+;
 // Слова из всех языков мира + цифры
 WORD: [\p{L}\p{N}_\u2013\u2014\u2026\u2022\u201C\u201D\u00AB\u00BB]+;
-INT: [0-9]+;
+
 STRING: '"' ( '""' | '\\' .  | ~["\\\r\n] )* '"'; // Разрешены экранированные кавычки и обратные слэши
 SYMBOL: [()[\]|=<>*+-,;&.:/\\%!`?'@#]+;   // распозноваие символов
 LBRACE: '{';
@@ -63,4 +63,5 @@ RBRACE: '}';
 WS: [ \t\r\n\u00A0\u00AD\u000B\f\u2002\u2003\u2009\u202F]+ -> skip;
 
 // Семантический предикат для принудительного распознавания INT
-forceInt: {STFileParserExtensions.isInteger(_input.LT(1).text)}? INT;
+forceInt: INT {STFileParserExtensions.isInteger($INT.text)}?;
+

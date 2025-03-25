@@ -2,11 +2,8 @@
 class STFileParserExtensions:
     @staticmethod
     def isInteger(text):
-        try:
-            int(text)
-            return True
-        except ValueError:
-            return False
+        print(f"Checking if '{text}' is integer")
+        return text.isdigit() 
 
     @staticmethod
     def isFolder(type, flags):
@@ -17,3 +14,10 @@ class STFileParserExtensions:
     def isTemplate(type, flags):
         # Проверка, что тип шаблона равен 0, а флаги равны 0 или 1
         return type == '0' and flags in {'0', '1'}
+    
+if __name__ == "__main__":
+    print("Self-test:")
+    print(STFileParserExtensions.isInteger("123"))  # True
+    print(STFileParserExtensions.isInteger("abc"))  # False
+    print(STFileParserExtensions.isFolder("1", "0"))  # True
+    print(STFileParserExtensions.isTemplate("0", "1"))  # True
