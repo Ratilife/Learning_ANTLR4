@@ -34,3 +34,13 @@ line 9:25 token recognition error at: '"}\r'
 line 10:1 mismatched input ',' expecting '}'
 line 42:34 token recognition error at: '"текст шаблона \r'
 line 43:17 token recognition error at: '"}\r'
+
+*************************************************
+line 5:11 mismatched input '0' expecting INT
+line 5:13 mismatched input '"бум"' expecting '{'
+line 5:19 token recognition error at: '"\t\tСообщение = Новый СообщениеПользователю;\r'
+line 6:2 mismatched input 'Сообщение' expecting '{'
+line 9:25 token recognition error at: '"}\r'
+line 10:1 mismatched input ',' expecting '}'
+line 42:34 token recognition error at: '"текст шаблона \r'
+line 43:17 token recognition error at: '"}\r'
