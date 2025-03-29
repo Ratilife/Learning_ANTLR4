@@ -44,3 +44,46 @@ line 9:25 token recognition error at: '"}\r'
 line 10:1 mismatched input ',' expecting '}'
 line 42:34 token recognition error at: '"текст шаблона \r'
 line 43:17 token recognition error at: '"}\r'
+
+**************************************************
+line 5:19 token recognition error at: '"\t\tСообщение = Новый СообщениеПользователю;\r'
+line 6:2 mismatched input 'Сообщение' expecting STRING
+line 9:25 token recognition error at: '"}\r'
+line 42:34 token recognition error at: '"текст шаблона \r'
+line 43:17 token recognition error at: '"}\r'
+line 35:1 no viable alternative at input '{1'
+line 36:1 no viable alternative at input '{"Папка2"'
+line 36:10 mismatched input '1' expecting '{'
+line 36:12 mismatched input '0' expecting '{'
+line 36:14 mismatched input '""' expecting '{'
+line 36:17 mismatched input '""' expecting '{'
+line 36:20 mismatched input ',' expecting '}'
+
+*************************************************
+Скобки сбалансированы.
+line 14:14 mismatched input '""' expecting STRING
+line 14:17 mismatched input '"Привет"' expecting '{'
+line 15:1 mismatched input ',' expecting '}'
+
+Проверка параметров шаблонов:
+Отсутствует param1 в шаблоне: Текст2
+Отсутствует codeBlock в шаблоне: Текст2
+Проверка завершена
+
+F:\Draw_Block_Diagram\ANTLR\Примеры\Для Практики\ИнтерфейсPythonПоиск\PyQt\ex7\STFilePython.py:94: UserWarning: Glyph 9 (       ) missing from font(s) DejaVu Sans.
+  plt.show()
+) missing from font(s) DejaVu Sans.\Для Практики\ИнтерфейсPythonПоиск\PyQt\ex7\STFilePython.py:94: UserWarning: Glyph 13 (
+  plt.show()
+**********************************************
+line 35:1 no viable alternative at input '{1'
+line 36:1 no viable alternative at input '{"Папка2"'
+line 36:10 mismatched input '1' expecting '{'
+line 36:12 mismatched input '0' expecting '{'
+line 36:14 mismatched input '""' expecting '{'
+line 36:17 mismatched input '""' expecting '{'
+line 36:20 mismatched input ',' expecting '}'
+
+F:\Draw_Block_Diagram\ANTLR\Примеры\Для Практики\ИнтерфейсPythonПоиск\PyQt\ex7\STFilePython.py:94: UserWarning: Glyph 9 (       ) missing from font(s) DejaVu Sans.
+  plt.show()
+) missing from font(s) DejaVu Sans.\Для Практики\ИнтерфейсPythonПоиск\PyQt\ex7\STFilePython.py:94: UserWarning: Glyph 13 (
+  plt.show()
