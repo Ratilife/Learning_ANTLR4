@@ -2,58 +2,44 @@ grammar STFile;
 
 BOM: '\uFEFF' -> skip;
 
-// Корневая структура файла: всегда начинается с {1, ...}
 fileStructure: LBRACE '1' ',' rootContent RBRACE;
 
-// Содержимое корневой структуры: папка с количеством элементов
-rootContent: LBRACE INT ',' folderContent RBRACE;      
+rootContent: LBRACE INT ',' folderContent RBRACE;
 
-// Содержимое папки: заголовок папки и вложенные элементы
-folderContent: folderHeader ',' nestedEntries;
+folderContent: folderHeader ',' entriesBlock;
 
-// Вложенные элементы: папки или шаблоны
-nestedEntries: entry (',' entry)*;
+entriesBlock: LBRACE (entry (',' entry)*)? RBRACE;
 
-// Запись: папка или шаблон
 entry:
-    // Папка: {count, {"Название", 1, 0, "", ""}, вложенные_элементы}
-    LBRACE INT ',' folderHeader ','  (nestedEntries | entry) RBRACE   
+    // Папка: {count, header, вложенные_элементы}
+    LBRACE INT ',' folderHeader ',' entriesBlock RBRACE
     |
-    // Шаблон: {0, {"Название", 0, 0, "@ТекстДляАвтоЗаполнения", "текст шаблона"}}
+    // Шаблон: {0, header}
     LBRACE '0' ',' templateHeader RBRACE
 ;
 
-// Заголовок папки: {"Название", 1, 0, "", ""}
 folderHeader:
     LBRACE
-    name=STRING ',' 
-    type='1' ','  // Тип "Папка" (второй параметр = 1)
-    flags='0' ','  // Константа (третий параметр = 0)
-    empty1=STRING  ','  // Пустая строка (четвёртый параметр)
-    empty2=STRING       // Пустая строка (пятый параметр)
+    STRING ',' 
+    INT ','    // type (любое число)
+    INT ','    // flags (любое число)
+    STRING ',' 
+    STRING
     RBRACE
 ;
 
-// Заголовок шаблона: {"Название", 0, 0, "@ТекстДляАвтоЗаполнения", "текст шаблона"}
 templateHeader:
     LBRACE
-    name=STRING ',' 
-    type='0' ','  // Тип "Шаблон" (второй параметр = 0)
-    flags=('0' | '1') ','  // Флаги (третий параметр, может быть 0 или 1)
-    param1=STRING ','  // Параметр 1 (четвёртый параметр)
-    codeBlock=STRING   // Код шаблона (пятый параметр)
+    STRING ',' 
+    '0' ','     // type (строго 0)
+    ('0' | '1') ',' // flags (0 или 1)
+    STRING ',' 
+    STRING
     RBRACE
 ;
 
-// Лексемы
-
-// Слова из всех языков мира + цифры
 INT: [0-9]+;
-//WORD: [\p{L}\p{N}_\u2013\u2014\u2026\u2022\u201C\u201D\u00AB\u00BB]+;
-STRING: '"' ( '""' | '\\' .  | ~["\\] )* '"'; // Разрешены экранированные кавычки и обратные слэши
-//SYMBOL: [()[\]|=<>*+-,;&.:/\\%!`?'@#]+;   // распозноваие символов
+STRING: '"' ('""' | ~["])* '"';
 LBRACE: '{';
 RBRACE: '}';
-// Пропускаем пробелы, табуляции и переводы строк
-WS: [ \t\r\n\u00A0\u00AD\u000B\f\u2002\u2003\u2009\u202F]+ -> skip;
-
+WS: [ \t\r\n]+ -> skip;
