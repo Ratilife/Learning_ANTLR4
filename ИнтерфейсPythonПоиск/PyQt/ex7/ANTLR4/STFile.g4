@@ -6,17 +6,25 @@ fileStructure: LBRACE '1' ',' rootContent RBRACE;
 
 rootContent: LBRACE INT ',' folderContent RBRACE;
 
-folderContent: folderHeader ',' entriesBlock;
 
-entriesBlock: LBRACE (entry (',' entry)*)? RBRACE;
+//folderContent: 
+//    folderHeader ',' entriesBlock 
+//    | folderHeader (',' entry)* 
+//;
+
+//entriesBlock: LBRACE (entry (',' entry)*)? RBRACE;
+folderContent: folderHeader (',' entry)*;
 
 entry:
-    // Папка: {count, header, вложенные_элементы}
-    LBRACE INT ',' folderHeader ',' entriesBlock RBRACE
+// Папка: {count, header, вложенные_элементы}
+    //LBRACE INT ',' folderHeader ','(entriesBlock |entry (','  entry)*) RBRACE
+    LBRACE INT ',' folderHeader ',' entryList RBRACE
     |
-    // Шаблон: {0, header}
+// Шаблон: {0, header}
     LBRACE '0' ',' templateHeader RBRACE
 ;
+
+entryList: entry (',' entry)*;
 
 folderHeader:
     LBRACE
