@@ -2,7 +2,7 @@ grammar STFile;
 
 BOM: '\uFEFF' -> skip;
 
-fileStructure: LBRACE '1' ',' rootContent RBRACE;
+fileStructure: LBRACE INT ',' rootContent RBRACE;
 
 rootContent: LBRACE INT ',' folderContent RBRACE;
 
@@ -46,7 +46,7 @@ templateHeader:
     RBRACE
 ;
 
-INT: [0-9]+;
+INT: [0-9\uFF10-\uFF19]+;   // Обычные и Unicode-цифры
 STRING: '"' ('""' | ~["])* '"';
 LBRACE: '{';
 RBRACE: '}';

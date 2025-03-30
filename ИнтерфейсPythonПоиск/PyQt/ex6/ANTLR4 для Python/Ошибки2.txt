@@ -91,3 +91,39 @@ F:\Draw_Block_Diagram\ANTLR\Примеры\Для Практики\Интерф�
 line 3:10 mismatched input '1' expecting INT
 line 3:12 mismatched input '0' expecting '{'
 line 3:20 mismatched input ',' expecting '}'
+
+********************************************
+Скобки сбалансированы.
+Line 3:10 - правило: unknown - ошибка: mismatched input '1' expecting INT
+{"Новый1",1,0,"",""},
+          ^
+Line 3:12 - правило: unknown - ошибка: mismatched input '0' expecting '{'
+{"Новый1",1,0,"",""},
+            ^
+Line 3:14 - правило: unknown - ошибка: mismatched input '""' expecting '{'
+{"Новый1",1,0,"",""},
+              ^
+Line 3:17 - правило: unknown - ошибка: mismatched input '""' expecting '{'
+{"Новый1",1,0,"",""},
+                 ^
+Line 3:20 - правило: unknown - ошибка: mismatched input ',' expecting '}'
+{"Новый1",1,0,"",""},
+                    ^
+
+Проверка параметров шаблонов:
+{1,{4,{"Новый1",1,0,"",""},{0,{"Текст",0,0,"бум... - правило: fileStructure
+  {4,{"Новый1",1,0,"",""} - правило: rootContent
+    {"Новый1",1,0,"","" - правило: folderContent
+      {"Новый1",1 - правило: folderHeader
+      0 - правило: entry
+      "" - правило: entry
+      "" - правило: entry
+Проверка завершена
+
+
+Найдены ошибки:
+Line 3:10 - правило: unknown - ошибка: mismatched input '1' expecting INT
+Line 3:12 - правило: unknown - ошибка: mismatched input '0' expecting '{'
+Line 3:14 - правило: unknown - ошибка: mismatched input '""' expecting '{'
+Line 3:17 - правило: unknown - ошибка: mismatched input '""' expecting '{'
+Line 3:20 - правило: unknown - ошибка: mismatched input ',' expecting '}'

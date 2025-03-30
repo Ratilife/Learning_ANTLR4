@@ -38,7 +38,7 @@ class STFileInfoListener(STFileCustomListener):
         
         # Получаем текст из исходного файла
         try:
-            with open("Новый1.st", "r", encoding="utf-8") as f:
+            with open("Новый2.st", "r", encoding="utf-8") as f:
                 lines = f.readlines()
                 if line > 0 and line <= len(lines):
                     error_line = lines[line-1].rstrip()
@@ -97,7 +97,7 @@ def check_braces_balance(file_content):
 
 def main():
     # Разбор файла с учетом кодировки "utf-8 BOM"
-    file_content = read_file_with_bom("Новый1.st")
+    file_content = read_file_with_bom("Новый2.st")
     
     # Проверка баланса скобок
     try:
@@ -106,7 +106,7 @@ def main():
         print(f"Ошибка в структуре файла: {e}")
         return
 
-    input_stream = FileStream("Новый1.st", encoding="utf-8")
+    input_stream = FileStream("Новый2.st", encoding="utf-8")
     lexer = STFileLexer(input_stream)
     token_stream = CommonTokenStream(lexer)
     parser = STFileParser(token_stream)
