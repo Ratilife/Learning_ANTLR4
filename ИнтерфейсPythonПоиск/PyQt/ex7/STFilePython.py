@@ -109,6 +109,11 @@ def main():
     input_stream = FileStream("Новый2.st", encoding="utf-8")
     lexer = STFileLexer(input_stream)
     token_stream = CommonTokenStream(lexer)
+
+    # Вывод всех токенов для отладки
+    token_stream.fill()
+    for token in token_stream.tokens:
+        print(f"{token.line}:{token.column} {lexer.ruleNames[token.type - 1]} = '{token.text}'")
     parser = STFileParser(token_stream)
     
     # Удаляем стандартный обработчик ошибок и добавляем наш
