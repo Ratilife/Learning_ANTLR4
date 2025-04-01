@@ -298,26 +298,69 @@ class STFileParser ( Parser ):
 
 
     def rootContent(self):
-
+        """
+    Разбирает содержимое корневого уровня ST-файла.
+    
+    Обрабатывает структуру:
+        '{' INT ',' folderContent '}'
+    
+    Логика работы:
+        1. Создает контекст RootContentContext
+        2. Ожидает обязательные элементы в строгом порядке:
+           - Открывающая фигурная скобка '{'
+           - Числовой идентификатор (INT)
+           - Запятая ','
+           - Содержимое папки (folderContent)
+           - Закрывающая фигурная скобка '}'
+        3. Обрабатывает возможные ошибки разбора
+    
+    Возвращает:
+        RootContentContext: Контекст с разобранным содержимым корневого уровня
+        
+    Генерирует:
+        RecognitionException: Если обнаружена синтаксическая ошибка
+        или нарушен порядок элементов
+        
+    Пример корректной структуры:
+        {
+            1001,
+            {
+                "MainFolder", 1, 0, "type", "description"
+            },
+            {
+                2001,
+                {
+                    "SubFolder", 1, 0, "type", "description"
+                },
+                ...
+            }
+        }
+    """
+         # Инициализация контекста для текущего правила
         localctx = STFileParser.RootContentContext(self, self._ctx, self.state)
+        # Начало обработки правила rootContent
         self.enterRule(localctx, 2, self.RULE_rootContent)
         try:
+            # Основная логика разбора (вариант 1 из возможных альтернатив)
             self.enterOuterAlt(localctx, 1)
+            # Разбор обязательных элементов по порядку:
             self.state = 20
-            self.match(STFileParser.LBRACE)
+            self.match(STFileParser.LBRACE)     # Открывающая '{'
             self.state = 21
-            self.match(STFileParser.INT)
+            self.match(STFileParser.INT)        # Числовой ID
             self.state = 22
-            self.match(STFileParser.T__0)
+            self.match(STFileParser.T__0)       # Запятая ','
             self.state = 23
-            self.folderContent()
+            self.folderContent()                # Рекурсивный разбор содержимого папки
             self.state = 24
-            self.match(STFileParser.RBRACE)
+            self.match(STFileParser.RBRACE)     # Закрывающая '}'
         except RecognitionException as re:
+            # Обработка ошибок с сохранением информации в контексте
             localctx.exception = re
             self._errHandler.reportError(self, re)
             self._errHandler.recover(self, re)
         finally:
+            # Гарантированное завершение правила
             self.exitRule()
         return localctx
 
