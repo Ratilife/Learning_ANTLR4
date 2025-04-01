@@ -1,5 +1,28 @@
 # Generated from STFile.g4 by ANTLR 4.13.1
 # encoding: utf-8
+
+"""
+Модуль STFileParser - синтаксический анализатор для файлов формата ST.
+
+Этот модуль был автоматически сгенерирован ANTLR 4.13.1 на основе грамматики STFile.g4.
+Обеспечивает разбор структуры ST-файлов и построение дерева разбора.
+
+Основные компоненты:
+1. Класс STFileParser - основной класс парсера
+2. Классы контекста для каждого правила грамматики
+3. Методы для обработки каждого элемента структуры файла
+
+Формат ST-файлов:
+{ 
+  ID ',' 
+  { 
+    ID ',' 
+    folderContent 
+  } 
+}
+где folderContent может содержать вложенные папки и шаблоны.
+"""
+
 from antlr4 import *
 from io import StringIO
 import sys
@@ -38,6 +61,30 @@ def serializedATN():
 
 class STFileParser ( Parser ):
 
+    """
+    Основной класс парсера для ST-файлов.
+
+    Атрибуты:
+        grammarFileName (str): Имя файла грамматики ('STFile.g4')
+        ruleNames (list): Список имен всех правил грамматики
+        literalNames (list): Буквенные обозначения токенов
+        symbolicNames (list): Символьные обозначения токенов
+        atn (ATN): Автоматная сеть переходов
+        decisionsToDFA (list): Детерминированные конечные автоматы
+        sharedContextCache (PredictionContextCache): Кеш контекстов
+    Константы токенов:
+        T__0 = 1   # Запятая ','
+        T__1 = 2   # Цифра '0' (маркер шаблона)
+        T__2 = 3   # Цифра '1'
+        BOM = 4    # Byte Order Mark
+        INT = 5    # Целое число
+        STRING = 6 # Текстовая строка
+        LBRACE = 7 # Открывающая фигурная скобка '{'
+        RBRACE = 8 # Закрывающая фигурная скобка '}'
+        WS = 9     # Пробельные символы
+
+    """
+
     grammarFileName = "STFile.g4"
 
     atn = ATNDeserializer().deserialize(serializedATN())
@@ -46,35 +93,51 @@ class STFileParser ( Parser ):
 
     sharedContextCache = PredictionContextCache()
 
+    # Буквенные обозначения токенов
     literalNames = [ "<INVALID>", "','", "'0'", "'1'", "'\\uFEFF'", "<INVALID>", 
                      "<INVALID>", "'{'", "'}'" ]
-
+     # Символьные обозначения токенов
     symbolicNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
                       "BOM", "INT", "STRING", "LBRACE", "RBRACE", "WS" ]
+    # Номера правил грамматики (соответствуют индексам в ruleNames)
+    RULE_fileStructure = 0      # Корневая структура всего файла
+    RULE_rootContent = 1        # Содержимое корневого уровня
+    RULE_folderContent = 2      # Содержимое папки (может включать другие папки и шаблоны)
+    RULE_entry = 3              # Отдельный элемент (папка или шаблон)
+    RULE_entryList = 4          # Список элементов (вложенных папок/шаблонов)
+    RULE_folderHeader = 5       # Заголовок папки (метаданные и параметры)
+    RULE_templateHeader = 6     # Заголовок шаблона (метаданные и параметры)
 
-    RULE_fileStructure = 0
-    RULE_rootContent = 1
-    RULE_folderContent = 2
-    RULE_entry = 3
-    RULE_entryList = 4
-    RULE_folderHeader = 5
-    RULE_templateHeader = 6
-
-    ruleNames =  [ "fileStructure", "rootContent", "folderContent", "entry", 
-                   "entryList", "folderHeader", "templateHeader" ]
-
+     # Список имен правил грамматики
+    ruleNames =  [ 
+        "fileStructure",        # Корневая структура файла
+        "rootContent",          # Содержимое корневого блока
+        "folderContent",        # Содержимое папки
+        "entry",                # Элемент (папка или шаблон)
+        "entryList",            # Список элементов
+        "folderHeader",         # Заголовок папки
+        "templateHeader"        # Заголовок шаблона
+        ]
+    # Константы токенов
     EOF = Token.EOF
-    T__0=1
-    T__1=2
-    T__2=3
-    BOM=4
-    INT=5
-    STRING=6
-    LBRACE=7
-    RBRACE=8
-    WS=9
+    T__0=1                       # Запятая ','      
+    T__1=2                       # Цифра '0' (маркер шаблона)
+    T__2=3                       # Цифра '1'
+    BOM=4                        # Byte Order Mark
+    INT=5                        # Целое число
+    STRING=6                     # Текстовая строка
+    LBRACE=7                     # Открывающая фигурная скобка '{'
+    RBRACE=8                     # Закрывающая фигурная скобка '}'
+    WS=9                          # Пробельные символы
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
+        """
+        Инициализация парсера.
+        
+        Аргументы:
+            input: Поток токенов от лексера
+            output: Поток для вывода (по умолчанию sys.stdout)
+        """
         super().__init__(input, output)
         self.checkVersion("4.13.1")
         self._interp = ParserATNSimulator(self, self.atn, self.decisionsToDFA, self.sharedContextCache)
@@ -84,33 +147,79 @@ class STFileParser ( Parser ):
 
 
     class FileStructureContext(ParserRuleContext):
+        """
+        Контекст корневой структуры файла.
+        
+        Формат:
+            { INT ',' rootContent }
+            
+        Методы:
+            LBRACE(): Получить токен '{'
+            INT(): Получить числовой идентификатор
+            rootContent(): Получить содержимое корневого уровня
+            RBRACE(): Получить токен '}'
+        """
         __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+            """
+            Инициализация контекста правила fileStructure
+            
+            Параметры:
+                parser: Экземпляр парсера
+                parent: Родительский контекст (если есть)
+                invokingState: Состояние вызова (по умолчанию -1)
+            """
             super().__init__(parent, invokingState)
-            self.parser = parser
+            self.parser = parser                # Ссылка на основной парсер
 
         def LBRACE(self):
+            """
+            Получить токен открывающей фигурной скобки '{'
+            
+            Возвращает:
+                TerminalNode: Узел с токеном '{'
+            """
             return self.getToken(STFileParser.LBRACE, 0)
 
         def INT(self):
+            """
+            Получить токен числового идентификатора
+            
+            Возвращает:
+                TerminalNode: Узел с числовым ID
+            """
             return self.getToken(STFileParser.INT, 0)
 
         def rootContent(self):
+            """
+            Получить контекст содержимого корневого уровня
+            
+            Возвращает:
+                RootContentContext: Контекст с содержимым между скобками
+            """
             return self.getTypedRuleContext(STFileParser.RootContentContext,0)
 
 
         def RBRACE(self):
+            """
+            Получить токен закрывающей фигурной скобки '}'
+            
+            Возвращает:
+                TerminalNode: Узел с токеном '}'
+            """
             return self.getToken(STFileParser.RBRACE, 0)
 
         def getRuleIndex(self):
             return STFileParser.RULE_fileStructure
 
         def enterRule(self, listener:ParseTreeListener):
+            """Вызывается при входе в правило."""
             if hasattr( listener, "enterFileStructure" ):
                 listener.enterFileStructure(self)
 
         def exitRule(self, listener:ParseTreeListener):
+            """Вызывается при выходе из правила."""
             if hasattr( listener, "exitFileStructure" ):
                 listener.exitFileStructure(self)
 
@@ -118,6 +227,18 @@ class STFileParser ( Parser ):
 
 
     def fileStructure(self):
+        """
+        Разобрать корневую структуру файла.
+        
+        Возвращает:
+            FileStructureContext: Контекст разобранной структуры
+            
+        Формат:
+            { INT ',' rootContent }
+            
+        Пример:
+            { 100, { 1, folderContent } }
+        """
 
         localctx = STFileParser.FileStructureContext(self, self._ctx, self.state)
         self.enterRule(localctx, 0, self.RULE_fileStructure)
@@ -202,17 +323,49 @@ class STFileParser ( Parser ):
 
 
     class FolderContentContext(ParserRuleContext):
-        __slots__ = 'parser'
+        """
+        Контекст для содержимого папки в ST-файле.
+    
+        Содержит заголовок папки и список вложенных элементов (entry).
+        Соответствует правилу folderContent в грамматике.
+    
+        Формат в файле:
+            folderHeader (',' entry)*
+        """
+        __slots__ = 'parser'        # Оптимизация памяти - фиксированный набор атрибутов
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+            """
+            Инициализация контекста содержимого папки.
+        
+        Args:
+            parser: Главный парсер
+            parent: Родительский контекст (по умолчанию None)
+            invokingState: Номер состояния вызова (по умолчанию -1)
+            """
             super().__init__(parent, invokingState)
-            self.parser = parser
+            self.parser = parser        # Ссылка на основной парсер
 
         def folderHeader(self):
+            """
+        Получить контекст заголовка папки.
+        
+        Returns:
+            FolderHeaderContext: Контекст с информацией о папке
+        """
             return self.getTypedRuleContext(STFileParser.FolderHeaderContext,0)
 
 
         def entry(self, i:int=None):
+            """
+            Получить вложенные элементы папки.
+        
+            Args:
+                i: Индекс конкретного элемента (если None - вернет все элементы)
+            
+            Returns:
+                EntryContext или list[EntryContext]: Контекст(ы) вложенных элементов
+        """
             if i is None:
                 return self.getTypedRuleContexts(STFileParser.EntryContext)
             else:
@@ -220,13 +373,31 @@ class STFileParser ( Parser ):
 
 
         def getRuleIndex(self):
+            """
+            Получить индекс правила folderContent в грамматике.
+        
+            Returns:
+                int: Индекс правила RULE_folderContent
+            """
             return STFileParser.RULE_folderContent
 
         def enterRule(self, listener:ParseTreeListener):
+            """
+            Обработка входа в правило folderContent.
+        
+            Args:
+                listener: Объект, реализующий интерфейс ParseTreeListener
+            """
             if hasattr( listener, "enterFolderContent" ):
                 listener.enterFolderContent(self)
 
         def exitRule(self, listener:ParseTreeListener):
+            """
+            Обработка выхода из правила folderContent.
+        
+            Args:
+                listener: Объект, реализующий интерфейс ParseTreeListener
+            """
             if hasattr( listener, "exitFolderContent" ):
                 listener.exitFolderContent(self)
 
@@ -234,36 +405,72 @@ class STFileParser ( Parser ):
 
 
     def folderContent(self):
-
+        """
+        Разбирает содержимое папки в ST-файле.
+    
+        Обрабатывает структуру:
+            folderHeader (',' entry)*
+    
+        Логика работы:
+            1. Создает контекст FolderContentContext
+            2. Обрабатывает обязательный folderHeader
+            3. Обрабатывает 0 или более вложенных элементов entry, разделенных запятыми
+            4. Обрабатывает возможные ошибки разбора
+    
+        Возвращает:
+            FolderContentContext: Контекст с разобранным содержимым папки
+        
+        Генерирует:
+            RecognitionException: Если обнаружена синтаксическая ошибка
+        
+        Пример разбираемой структуры:
+            { "Folder1", 1, 0, "type1", "desc1" }, 
+            { 101, { "SubFolder", 1, 0, "type2", "desc2" }, [...] }, 
+            { 0, { "Template1", 0, 1, "tpl_type", "tpl_desc" } }
+        """
         localctx = STFileParser.FolderContentContext(self, self._ctx, self.state)
         self.enterRule(localctx, 4, self.RULE_folderContent)
         self._la = 0 # Token type
         try:
+             # Основная логика разбора
             self.enterOuterAlt(localctx, 1)
+            # 1. Разбор обязательного заголовка папки
             self.state = 26
             self.folderHeader()
+            # 2. Разбор необязательных вложенных элементов
             self.state = 31
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while _la==1:
+            while _la==1:                           # Пока есть запятые (T__0)
                 self.state = 27
-                self.match(STFileParser.T__0)
+                self.match(STFileParser.T__0)       # Сопоставление запятой
                 self.state = 28
-                self.entry()
+                self.entry()                        # Разбор вложенного элемента
                 self.state = 33
                 self._errHandler.sync(self)
-                _la = self._input.LA(1)
+                _la = self._input.LA(1)             # Проверка следующего токена
 
         except RecognitionException as re:
+            # Обработка ошибок разбора
             localctx.exception = re
             self._errHandler.reportError(self, re)
             self._errHandler.recover(self, re)
         finally:
+             # Завершение правила независимо от результата
             self.exitRule()
         return localctx
 
 
     class EntryContext(ParserRuleContext):
+        """
+        Контекст элемента (папки или шаблона).
+        
+        Может быть двух видов:
+        1. Папка:
+            { INT ',' folderHeader ',' entryList }
+        2. Шаблон:
+            { '0' ',' templateHeader }
+        """
         __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -295,10 +502,12 @@ class STFileParser ( Parser ):
             return STFileParser.RULE_entry
 
         def enterRule(self, listener:ParseTreeListener):
+            """Вызывается при входе в правило."""
             if hasattr( listener, "enterEntry" ):
                 listener.enterEntry(self)
 
         def exitRule(self, listener:ParseTreeListener):
+            """Вызывается при выходе из правила."""
             if hasattr( listener, "exitEntry" ):
                 listener.exitEntry(self)
 
@@ -306,6 +515,23 @@ class STFileParser ( Parser ):
 
 
     def entry(self):
+        """
+        Разобрать элемент (папку или шаблон).
+        
+        Возвращает:
+            EntryContext: Контекст разобранного элемента
+            
+        Варианты:
+        1. Папка:
+            { INT ',' folderHeader ',' entryList }
+           Пример:
+            { 1, { "Folder", 1, 0, "type", "desc" }, [вложенные элементы] }
+            
+        2. Шаблон:
+            { '0' ',' templateHeader }
+           Пример:
+            { 0, { "Template", 0, 1, "type", "desc" } }
+        """
 
         localctx = STFileParser.EntryContext(self, self._ctx, self.state)
         self.enterRule(localctx, 6, self.RULE_entry)
@@ -314,6 +540,7 @@ class STFileParser ( Parser ):
             self._errHandler.sync(self)
             la_ = self._interp.adaptivePredict(self._input,1,self._ctx)
             if la_ == 1:
+                # Обработка папки
                 self.enterOuterAlt(localctx, 1)
                 self.state = 34
                 self.match(STFileParser.LBRACE)
@@ -332,6 +559,7 @@ class STFileParser ( Parser ):
                 pass
 
             elif la_ == 2:
+                 # Обработка шаблона
                 self.enterOuterAlt(localctx, 2)
                 self.state = 42
                 self.match(STFileParser.LBRACE)
