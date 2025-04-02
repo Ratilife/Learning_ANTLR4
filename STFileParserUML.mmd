@@ -1,0 +1,101 @@
+classDiagram
+    class STFileParser {
+        +grammarFileName: str = "STFile.g4"
+        +ruleNames: list
+        +literalNames: list
+        +symbolicNames: list
+        +atn: ATN
+        +decisionsToDFA: list[DFA]
+        +sharedContextCache: PredictionContextCache
+        +__init__(input:TokenStream, output:TextIO = sys.stdout)
+        +fileStructure() FileStructureContext
+        +rootContent() RootContentContext
+        +folderContent() FolderContentContext
+        +entry() EntryContext
+        +entryList() EntryListContext
+        +folderHeader() FolderHeaderContext
+        +templateHeader() TemplateHeaderContext
+    }
+
+    class FileStructureContext {
+        +LBRACE()
+        +INT()
+        +rootContent() RootContentContext
+        +RBRACE()
+        +getRuleIndex()
+        +enterRule(listener:ParseTreeListener)
+        +exitRule(listener:ParseTreeListener)
+    }
+
+    class RootContentContext {
+        +LBRACE()
+        +INT()
+        +folderContent() FolderContentContext
+        +RBRACE()
+        +getRuleIndex()
+        +enterRule(listener:ParseTreeListener)
+        +exitRule(listener:ParseTreeListener)
+    }
+
+    class FolderContentContext {
+        +folderHeader() FolderHeaderContext
+        +entry(i:int) EntryContext | list[EntryContext]
+        +getRuleIndex()
+        +enterRule(listener:ParseTreeListener)
+        +exitRule(listener:ParseTreeListener)
+    }
+
+    class EntryContext {
+        +LBRACE()
+        +INT()
+        +folderHeader() FolderHeaderContext
+        +entryList() EntryListContext
+        +RBRACE()
+        +templateHeader() TemplateHeaderContext
+        +getRuleIndex()
+        +enterRule(listener:ParseTreeListener)
+        +exitRule(listener:ParseTreeListener)
+    }
+
+    class EntryListContext {
+        +entry(i:int) EntryContext | list[EntryContext]
+        +getRuleIndex()
+        +enterRule(listener:ParseTreeListener)
+        +exitRule(listener:ParseTreeListener)
+    }
+
+    class FolderHeaderContext {
+        +LBRACE()
+        +STRING(i:int)
+        +INT(i:int)
+        +RBRACE()
+        +getRuleIndex()
+        +enterRule(listener:ParseTreeListener)
+        +exitRule(listener:ParseTreeListener)
+    }
+
+    class TemplateHeaderContext {
+        +LBRACE()
+        +STRING(i:int)
+        +RBRACE()
+        +getRuleIndex()
+        +enterRule(listener:ParseTreeListener)
+        +exitRule(listener:ParseTreeListener)
+    }
+
+    STFileParser --> FileStructureContext
+    STFileParser --> RootContentContext
+    STFileParser --> FolderContentContext
+    STFileParser --> EntryContext
+    STFileParser --> EntryListContext
+    STFileParser --> FolderHeaderContext
+    STFileParser --> TemplateHeaderContext
+
+    FileStructureContext --> RootContentContext
+    RootContentContext --> FolderContentContext
+    FolderContentContext --> FolderHeaderContext
+    FolderContentContext --> EntryContext
+    EntryContext --> FolderHeaderContext
+    EntryContext --> EntryListContext
+    EntryContext --> TemplateHeaderContext
+    EntryListContext --> EntryContext
