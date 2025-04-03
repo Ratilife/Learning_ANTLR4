@@ -71,14 +71,5 @@ class STFileListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by STFileParser#int_value.
-    def enterInt_value(self, ctx:STFileParser.Int_valueContext):
-        pass
-
-    # Exit a parse tree produced by STFileParser#int_value.
-    def exitInt_value(self, ctx:STFileParser.Int_valueContext):
-        pass
-
-
 
 del STFileParser

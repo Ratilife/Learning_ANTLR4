@@ -110,6 +110,57 @@ class STFileInfoListener(STFileCustomListener):
         """Возвращает список ошибок."""
         return self.error_messages
 
+'''
+class TreeGraphListener(ParseTreeListener):
+    """
+    Слушатель для построения графа структуры файла.
+
+    Атрибуты:
+        node_id (int): Идентификатор текущего узла.
+        edges (list): Список ребер графа.
+        G (nx.DiGraph): Граф для визуализации.
+        parser: Парсер ANTLR.
+
+    Методы:
+        enterEveryRule: Добавление узла правила в граф.
+        visitTerminal: Добавление терминального узла в граф.
+    """
+    def __init__(self, graph, parser):
+        self.node_id = 0
+        self.edges = []
+        self.G = graph
+        self.parser = parser
+    
+    def enterEveryRule(self, ctx):
+        """
+        Добавление узла правила в граф.
+        
+        Args:
+            ctx: Контекст правила.
+        """
+        node_label = self.parser.ruleNames[ctx.getRuleIndex()]
+        self.G.add_node(self.node_id, label=node_label)
+        if hasattr(ctx, 'parentCtx') and ctx.parentCtx:
+            parent_id = ctx.parentCtx.node_id
+            self.edges.append((parent_id, self.node_id))
+        ctx.node_id = self.node_id
+        self.node_id += 1
+    
+
+    def visitTerminal(self, node: TerminalNodeImpl):
+        """
+        Добавление терминального узла в граф.
+        
+        Args:
+            node: Терминальный узел.
+        """
+        label = node.getText().replace('\t', '\\t').replace('\r', '\\r').replace('\n', '\\n')
+        self.G.add_node(self.node_id, label=label)
+        if hasattr(node, 'parentCtx') and node.parentCtx:
+            self.G.add_edge(node.parentCtx.node_id, self.node_id)
+        self.node_id += 1
+    '''
+
 class TreeGraphListener(ParseTreeListener):
     def __init__(self, graph, parser):
         self.G = graph
@@ -139,7 +190,29 @@ class TreeGraphListener(ParseTreeListener):
     def exitEveryRule(self, ctx):
         if self.node_stack:
             self.node_stack.pop()
-
+'''
+class PrettyTreeListener(ParseTreeListener):
+    def __init__(self):
+        self.tree = []  # Хранит строки для вывода
+        self.current_level = -1  # Уровень вложенности
+    
+    def enterEveryRule(self, ctx):
+        self.current_level += 1
+        rule_name = STFileParser.ruleNames[ctx.getRuleIndex()]
+        self.tree.append("│   " * (self.current_level-1) + "├── " + rule_name)
+    
+    def visitTerminal(self, node):
+        text = node.getText().replace('\n', '\\n').replace('\r', '\\r')
+        if len(text) > 50:
+            text = text[:20] + "..." + text[-20:] if len(text) > 40 else text[:30] + "..."
+        self.tree.append("│   " * self.current_level + "├── " + text)
+    
+    def exitEveryRule(self, ctx):
+        self.current_level -= 1
+    
+    def get_pretty_tree(self):
+        return "\n".join(self.tree)
+'''
 class PrettyTreeListener(ParseTreeListener):
     def __init__(self):
         self.tree = []
@@ -210,213 +283,7 @@ def check_braces_balance(file_content):
         raise ValueError(f"Не хватает {len(stack)} закрывающих скобок. Открывающие скобки в позициях: {stack}")
     else:
         print("Скобки сбалансированы.")
-'''
-def visualize_hierarchy( parser, tree):
-    """
-    Визуализирует структуру файла в виде иерархического дерева.
-    
-    Args:
-        parser: Экземпляр парсера STFileParser.
-        tree: Дерево разбора, полученное от парсера.
-    """
-    import numpy as np
-    import networkx as nx
-    import matplotlib.pyplot as plt
-    
-    plt.figure(figsize=(14, 10))
 
-    # Создаем граф
-    G = nx.DiGraph()
-    graph_listener = TreeGraphListener(G, parser)
-    walker = ParseTreeWalker()
-    walker.walk(graph_listener, tree)
-
-    # Определяем уровни иерархии
-    levels = {}
-    for node in G.nodes():
-        if 'rule_' in node:
-            level = len(list(nx.ancestors(G, node)))
-            levels[node] = level
-
-    # Создаем позиции для узлов
-    pos = {}
-    y_offset = 0
-    max_level = max(levels.values()) if levels else 0
-
-    for level in range(max_level + 1):
-        nodes_at_level = [n for n in levels if levels[n] == level]
-        x_positions = np.linspace(0, 10, len(nodes_at_level)+2)[1:-1]
-        
-        for i, node in enumerate(nodes_at_level):
-            pos[node] = (x_positions[i], max_level - level)
-        
-        # Добавляем терминальные узлы
-        for node in G.nodes():
-            if node.startswith('term_'):
-                predecessors = list(G.predecessors(node))
-                if predecessors and predecessors[0] in pos:
-                    parent_pos = pos[predecessors[0]]
-                    term_count = len([n for n in G.nodes() 
-                                    if n.startswith('term_') and 
-                                    predecessors[0] in list(G.predecessors(n))])
-                    term_idx = [n for n in G.nodes() 
-                               if n.startswith('term_') and 
-                               predecessors[0] in list(G.predecessors(n))].index(node)
-                    
-                    pos[node] = (parent_pos[0] - 0.5 + (term_idx+1)/(term_count+1), 
-                                max_level - level - 0.3)
-
-    # Рисуем граф
-    node_colors = []
-    node_sizes = []
-    labels = {}
-
-    for node in G.nodes():
-        label = G.nodes[node].get('label', '')
-        if len(label) > 15:
-            label = label[:12] + "..."
-        labels[node] = label
-        
-        if node.startswith('rule_'):
-            node_colors.append('#a6cee3')  # Голубой для правил
-            node_sizes.append(2000)
-        else:
-            node_colors.append('#b2df8a')  # Зеленый для терминалов
-            node_sizes.append(1500)
-
-    nx.draw(G, pos, 
-           node_color=node_colors,
-           node_size=node_sizes,
-           labels=labels,
-           font_size=8,
-           font_weight='bold',
-           with_labels=True,
-           edge_color='gray',
-           width=0.5,
-           arrows=False)  # Убираем стрелки
-
-    # Добавляем горизонтальные линии для уровней
-    for level in range(max_level + 1):
-        nodes_at_level = [n for n in levels if levels[n] == level]
-        if nodes_at_level:
-            x_positions = [pos[n][0] for n in nodes_at_level]
-            plt.hlines(max_level - level, 
-                      min(x_positions)-0.5, 
-                      max(x_positions)+0.5, 
-                      colors='gray', 
-                      linestyles='dashed', 
-                      alpha=0.3)
-
-    plt.title("Иерархическая структура ST-файла", fontsize=12)
-    plt.axis('off')
-    plt.tight_layout()
-    plt.show()
-'''
-def visualize_hierarchy(parser, tree):
-    """
-    Визуализирует структуру файла в виде иерархического дерева.
-    
-    Args:
-        parser: Экземпляр парсера STFileParser.
-        tree: Дерево разбора, полученное от парсера.
-    """
-    import numpy as np
-    
-    # Создаем фигуру с большими размерами и DPI
-    plt.figure(figsize=(16, 12), dpi=100)
-    
-    # Создаем граф
-    G = nx.DiGraph()
-    graph_listener = TreeGraphListener(G, parser)
-    walker = ParseTreeWalker()
-    walker.walk(graph_listener, tree)
-
-    # Определяем уровни иерархии
-    levels = {}
-    for node in G.nodes():
-        if 'rule_' in node:
-            level = len(list(nx.ancestors(G, node)))
-            levels[node] = level
-
-    # Создаем позиции для узлов
-    pos = {}
-    max_level = max(levels.values()) if levels else 0
-    vertical_spacing = 1.2  # Увеличим вертикальные расстояния
-
-    for level in range(max_level + 1):
-        nodes_at_level = [n for n in levels if levels[n] == level]
-        x_positions = np.linspace(0, 12, len(nodes_at_level)+2)[1:-1]
-        
-        for i, node in enumerate(nodes_at_level):
-            pos[node] = (x_positions[i], (max_level - level) * vertical_spacing)
-        
-        # Добавляем терминальные узлы
-        for node in G.nodes():
-            if node.startswith('term_'):
-                predecessors = list(G.predecessors(node))
-                if predecessors and predecessors[0] in pos:
-                    parent_pos = pos[predecessors[0]]
-                    term_count = len([n for n in G.nodes() 
-                                    if n.startswith('term_') and 
-                                    predecessors[0] in list(G.predecessors(n))])
-                    term_idx = [n for n in G.nodes() 
-                               if n.startswith('term_') and 
-                               predecessors[0] in list(G.predecessors(n))].index(node)
-                    
-                    pos[node] = (parent_pos[0] - 0.5 + (term_idx+1)/(term_count+1), 
-                                (max_level - level) * vertical_spacing - 0.4)
-
-    # Рисуем граф
-    node_colors = []
-    node_sizes = []
-    labels = {}
-
-    for node in G.nodes():
-        label = G.nodes[node].get('label', '')
-        # Удаляем табуляции и другие спецсимволы из меток
-        label = label.replace('\t', ' ').replace('\n', '\\n').replace('\r', '\\r')
-        if len(label) > 15:
-            label = label[:12] + "..."
-        labels[node] = label
-        
-        if node.startswith('rule_'):
-            node_colors.append('#a6cee3')  # Голубой для правил
-            node_sizes.append(2000)
-        else:
-            node_colors.append('#b2df8a')  # Зеленый для терминалов
-            node_sizes.append(1500)
-
-    nx.draw(G, pos, 
-           node_color=node_colors,
-           node_size=node_sizes,
-           labels=labels,
-           font_size=8,
-           font_weight='bold',
-           with_labels=True,
-           edge_color='gray',
-           width=0.5,
-           arrows=False)
-
-    # Добавляем горизонтальные линии для уровней
-    for level in range(max_level + 1):
-        nodes_at_level = [n for n in levels if levels[n] == level]
-        if nodes_at_level:
-            x_positions = [pos[n][0] for n in nodes_at_level]
-            plt.hlines((max_level - level) * vertical_spacing, 
-                      min(x_positions)-0.5, 
-                      max(x_positions)+0.5, 
-                      colors='gray', 
-                      linestyles='dashed', 
-                      alpha=0.3)
-
-    plt.title("Иерархическая структура ST-файла", fontsize=12)
-    plt.axis('off')
-    
-    # Вместо tight_layout используем adjust
-    plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.05)
-    
-    plt.show()
-    
 def main():
     """
     Основная функция для запуска анализа ST-файла.
@@ -463,9 +330,6 @@ def main():
         walker.walk(pretty_listener, tree)
         print(pretty_listener.get_pretty_tree())
 
-        # Визуализация иерархии
-        visualize_hierarchy(parser, tree)
-
         # Выводим ошибки, если они есть
         errors = info_listener.get_errors()
         if errors:
@@ -474,8 +338,50 @@ def main():
                 print(error)
         else:
             print("\nФайл успешно разобран без ошибок")
+        '''    
+        # Визуализация графа
+        G = nx.DiGraph()
+        graph_listener = TreeGraphListener(G, parser)
+        walker.walk(graph_listener, tree)
+        #G.add_edges_from(graph_listener.edges)
         
-       
+        plt.figure(figsize=(12, 8))
+        pos = nx.spring_layout(G)
+        labels = nx.get_node_attributes(G, 'label')
+        nx.draw(G, pos, with_labels=True, labels=labels, 
+               node_size=3000, node_color="lightblue", font_size=10)
+        plt.show()
+        '''
+       # Визуализация графа
+        G = nx.DiGraph()
+        graph_listener = TreeGraphListener(G, parser)
+        walker.walk(graph_listener, tree)
+
+        plt.figure(figsize=(14, 10))
+
+        # Используем spring_layout как резервный вариант
+        try:
+            pos = nx.nx_agraph.graphviz_layout(G, prog='dot')
+        except:
+            pos = nx.spring_layout(G, k=0.5, iterations=50)
+
+        # Разные цвета для узлов
+        node_colors = []
+        for node in G.nodes():
+            node_type = G.nodes[node].get('type', '')
+            node_colors.append('#a6cee3' if node_type == 'rule' else '#b2df8a')
+
+        nx.draw(G, pos, with_labels=True,
+                labels=nx.get_node_attributes(G, 'label'),
+                node_size=2500,
+                node_color=node_colors,
+                font_size=9,
+                font_weight='bold',
+                edge_color='#808080')
+
+        plt.title("Структура ST-файла", fontsize=14)
+        plt.tight_layout()
+        plt.show()
 
     except Exception as e:
         print(f"Ошибка при разборе: {str(e)}")
