@@ -183,3 +183,26 @@ Line 1:2 - правило: unknown - ошибка: mismatched input '1' expectin
 Line 1:2 - правило: unknown - ошибка: mismatched input '1' expecting INT
 
 F:\Draw_Block_Diagram\ANTLR\Примеры\Для Практики\ИнтерфейсPythonПоиск\PyQt\ex7>
+
+****************************************
+Найдены ошибки:
+Line 6626:19 - правило: unknown - ошибка: mismatched input '1' expecting '0'
+Line 6626:21 - правило: unknown - ошибка: mismatched input '0' expecting '{'
+Line 6626:23 - правило: unknown - ошибка: mismatched input '""' expecting '{'
+Line 6626:26 - правило: unknown - ошибка: mismatched input '""' expecting '{'
+Line 6627:1 - правило: unknown - ошибка: mismatched input ',' expecting '}'
+********************************************************
+
+Найдены ошибки:
+Line 6627:0 - правило: unknown - ошибка: extraneous input '}' expecting ','
+Line 6630:0 - правило: unknown - ошибка: extraneous input '}' expecting ','
+Line 6633:0 - правило: unknown - ошибка: extraneous input '}' expecting ','
+Line 6636:0 - правило: unknown - ошибка: extraneous input '}' expecting ','
+Line 6639:0 - правило: unknown - ошибка: extraneous input '}' expecting ','
+Line 6642:0 - правило: unknown - ошибка: mismatched input '}' expecting ','
+Line 6847:0 - правило: unknown - ошибка: extraneous input '}' expecting ','
+Line 6986:0 - правило: unknown - ошибка: extraneous input '}' expecting ','
+Line 7134:0 - правило: unknown - ошибка: extraneous input '}' expecting ','
+Line 7149:0 - правило: unknown - ошибка: mismatched input '}' expecting ','
+Line 7153:0 - правило: unknown - ошибка: extraneous input '}' expecting ','
+Line 8657:1 - правило: unknown - ошибка: mismatched input '<EOF>' expecting '}'

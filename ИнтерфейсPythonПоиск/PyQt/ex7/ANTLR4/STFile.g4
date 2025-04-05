@@ -17,11 +17,14 @@ folderContent: folderHeader (',' entry)*;
 
 entry:
 // Папка: {count, header, вложенные_элементы}
-    //LBRACE int_value ',' folderHeader ','(entriesBlock |entry (','  entry)*) RBRACE
-    LBRACE int_value ',' folderHeader ',' entryList RBRACE
-    |
+                // что бы незабыть LBRACE int_value ',' folderHeader ','(entriesBlock |entry (','  entry)*) RBRACE
+LBRACE int_value ',' folderHeader ',' entryList RBRACE
+|
+// Пустая папка
+LBRACE int_value ',' folderHeader RBRACE
+|
 // Шаблон: {0, header}
-    LBRACE '0' ',' templateHeader RBRACE
+LBRACE '0' ',' templateHeader RBRACE
 ;
 
 entryList: entry (',' entry)*;
@@ -45,7 +48,7 @@ templateHeader:
     STRING
     RBRACE
 ;
-int_value: INT | '1';  // Разрешаем как INT, так и явное '1'
+int_value: INT | ('0' | '1');  // Разрешаем как INT, так и явное '1'
 INT: [0-9\uFF10-\uFF19]+;   
 STRING: '"' ('""' | ~["])* '"';
 LBRACE: '{';

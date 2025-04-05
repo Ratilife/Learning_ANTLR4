@@ -170,6 +170,32 @@ class PrettyTreeListener(ParseTreeListener):
     def get_pretty_tree(self):
         header = "="*50 + "\nСтруктура файла:\n" + "="*50
         return header + "\n" + "\n".join(self.tree) + "\n" + "="*50
+    
+    def save_to_file(self, filename="structure.txt"):
+        """Сохраняет структуру дерева в файл в исходном формате"""
+        with open(filename, "w", encoding="utf-8") as f:
+            for line in self.tree:
+                if line.startswith("fileStructure"):
+                    continue
+                f.write(f"{line}\n")
+
+    def save_to_file1(self, filename="structure.txt"):
+        """Сохраняет структуру дерева в файл в заданном формате"""
+        with open(filename, "w", encoding="utf-8") as f:
+            for line in self.tree:
+                # Убираем лишние пробелы в начале строки
+                cleaned_line = line.lstrip()
+                # Заменяем правило "fileStructure" на пустую строку
+                if cleaned_line.startswith("fileStructure"):
+                    continue
+                # Заменяем отступы для правил на 4 пробела
+                if any(rule in cleaned_line for rule in STFileParser.ruleNames):
+                    indent = "    " * (line.count('│   ') + line.count('    '))
+                    f.write(f"{indent}{cleaned_line}\n")
+                else:
+                    # Для терминалов добавляем дополнительный отступ
+                    indent = "    " * (line.count('│   ') + line.count('    ') + 1)
+                    f.write(f"{indent}{cleaned_line}\n")
         
 def read_file_with_bom(file_path):
     """
@@ -198,18 +224,59 @@ def check_braces_balance(file_content):
         ValueError: Если обнаружены несбалансированные скобки.
     """
     stack = []
-    for i, char in enumerate(file_content):
-        if char == '{':
-            stack.append(i)
-        elif char == '}':
-            if not stack:
-                raise ValueError(f"Лишняя закрывающая скобка в позиции {i}")
-            stack.pop()
+    lines = file_content.split('\n')  # Разбиваем содержимое на строки
+    
+    for line_num, line in enumerate(lines, start=1):
+        for char_pos, char in enumerate(line):
+            if char == '{':
+                # Сохраняем номер строки и позицию в строке
+                stack.append((line_num, char_pos + 1))  # +1 для удобства (позиция начинается с 1)
+            elif char == '}':
+                if not stack:
+                    raise ValueError(f"Лишняя закрывающая скобка в строке {line_num}, позиция {char_pos + 1}")
+                stack.pop()
 
     if stack:
-        raise ValueError(f"Не хватает {len(stack)} закрывающих скобок. Открывающие скобки в позициях: {stack}")
+        error_lines = []
+        for line_num, char_pos in stack:
+            # Получаем текст строки с ошибкой
+            error_line = lines[line_num - 1]
+            # Формируем сообщение с указанием строки, позиции и самой строки
+            error_msg = (f"Не хватает закрывающей скобки для открывающей в строке {line_num}, позиция {char_pos}:\n"
+                         f"{error_line}\n"
+                         f"{' ' * (char_pos - 1)}^")
+            error_lines.append(error_msg)
+        
+        raise ValueError(f"Не хватает {len(stack)} закрывающих скобок:\n\n" + "\n\n".join(error_lines))
     else:
         print("Скобки сбалансированы.")
+
+def save_tokens_to_file(tokens, lexer, filename="tokens_output.txt"):
+    """
+    Сохраняет список токенов в файл в удобочитаемом формате.
+    
+    Args:
+        tokens: Список токенов из CommonTokenStream
+        lexer: Экземпляр лексера
+        filename: Имя файла для сохранения (по умолчанию "tokens_output.txt")
+    """
+    with open(filename, "w", encoding="utf-8") as tokens_file:
+        # Заголовок
+        tokens_file.write("="*50 + "\nСПИСОК ТОКЕНОВ\n" + "="*50 + "\n")
+        tokens_file.write("{:<5} {:<5} {:<20} {}\n".format("Line", "Pos", "Type", "Value"))
+        tokens_file.write("-"*50 + "\n")
+        
+        # Записываем каждый токен
+        for token in tokens:
+            tokens_file.write("{:<5} {:<5} {:<20} '{}'\n".format(
+                token.line, 
+                token.column, 
+                lexer.ruleNames[token.type - 1], 
+                token.text.replace("\n", "\\n").replace("\r", "\\r")
+            ))
+        
+        tokens_file.write("="*50 + "\n")
+        tokens_file.write(f"Всего токенов: {len(tokens)}\n")
 '''
 def visualize_hierarchy( parser, tree):
     """
@@ -422,25 +489,35 @@ def main():
     Основная функция для запуска анализа ST-файла.
     """
     # Разбор файла с учетом кодировки "utf-8 BOM"
-    file_content = read_file_with_bom("Новый2.st")
+    file_content = read_file_with_bom("МоиШаблоны.st")
     
     # Проверка баланса скобок
     try:
-        check_braces_balance(file_content)
+        #check_braces_balance(file_content)
+        print('проверка баланса скоб отключена')
     except ValueError as e:
         print(f"Ошибка в структуре файла: {e}")
         return
 
-    input_stream = FileStream("Новый2.st", encoding="utf-8")
+    input_stream = FileStream("МоиШаблоны.st", encoding="utf-8")
     lexer = STFileLexer(input_stream)
     token_stream = CommonTokenStream(lexer)
-
+    '''
+    эту реализацию визуализации отладки перенес отдельно в метод save_tokens_to_file()
     # Вывод всех токенов для отладки
     token_stream.fill()
     for token in token_stream.tokens:
         print(f"{token.line}:{token.column} {lexer.ruleNames[token.type - 1]} = '{token.text}'")
     parser = STFileParser(token_stream)
+    '''
+    # Вывод всех токенов для отладки
+    # Заполняем поток токенов
+    token_stream.fill()
     
+    # Сохраняем токены в файл
+    save_tokens_to_file(token_stream.tokens, lexer)
+    print("Токены сохранены в файл tokens_output.txt")
+    parser = STFileParser(token_stream)
     # Удаляем стандартный обработчик ошибок и добавляем наш
     parser.removeErrorListeners()
     info_listener = STFileInfoListener()
@@ -458,13 +535,17 @@ def main():
         print("Проверка завершена\n")
         
         # Вывод структуры в виде дерева
-        print("\nСтруктура файла:")
+        #print("\nСтруктура файла:")
         pretty_listener = PrettyTreeListener()
         walker.walk(pretty_listener, tree)
         print(pretty_listener.get_pretty_tree())
 
+        # Сохраняем структуру в файл
+        pretty_listener.save_to_file("structure.txt")
+        print("\nСтруктура сохранена в файл structure.txt")
+
         # Визуализация иерархии
-        visualize_hierarchy(parser, tree)
+        #visualize_hierarchy(parser, tree)
 
         # Выводим ошибки, если они есть
         errors = info_listener.get_errors()
