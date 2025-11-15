@@ -6,6 +6,6 @@ antlr4 -Dlanguage=Python3 CSharpParser.g4 -o CShar
 
 antlr4 -Dlanguage=Python3 CSharpLexer.g4 CSharpParser.g4 CSharpPreprocessorParser.g4
 
-
+antlr4 -Dlanguage=Python3 -visitor Calculator.g4   Генерация кода Посетителя
 
 pip install antlr4-python3-runtime networkx matplotlib  - matplotlib и networkx для визуализации дерева синтаксиса строит графическое представление дерева
